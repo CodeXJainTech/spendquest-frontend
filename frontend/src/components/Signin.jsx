@@ -11,13 +11,14 @@ const Signin = () => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-
+  const apiurl = import.meta.env.VITE_API_URL + "/user/signin";
+  // const localurl = "http://localhost:3000/api/v1/user/signin";
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/user/signin",
+        apiurl,
         form,
         { headers: { "Content-Type": "application/json" } }
       );
