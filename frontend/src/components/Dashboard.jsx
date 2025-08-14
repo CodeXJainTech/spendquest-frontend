@@ -18,7 +18,8 @@ const Dashboard = () => {
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const apiurl = import.meta.env.VITE_API_URL;
+  const apiurl = `${import.meta.env.VITE_API_URL}`;
+
   // const apiurl = "http://localhost:3000/api/v1";
 
   const authAxios = axios.create({

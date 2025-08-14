@@ -11,7 +11,7 @@ const Signin = () => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-  const apiurl = import.meta.env.VITE_API_URL + "/user/signin";
+  const apiurl = `${import.meta.env.VITE_API_URL}/user/signin`;
   // const apiurl = "http://localhost:3000/api/v1/user/signin";
   const handleSubmit = async (e) => {
     e.preventDefault();
