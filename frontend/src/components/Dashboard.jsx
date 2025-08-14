@@ -18,12 +18,11 @@ const Dashboard = () => {
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const apiUrl = import.meta.env.VITE_API_URL;
-  // const localurl = "http://localhost:3000/api/v1";
+  const apiurl = import.meta.env.VITE_API_URL;
+  // const apiurl = "http://localhost:3000/api/v1";
 
   const authAxios = axios.create({
-    baseURL: apiUrl,
-    // baseURL: localurl,
+    baseURL: apiurl,
     headers: {
       Authorization: `Bearer ${token}`,
       userId: userId || ""
