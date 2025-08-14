@@ -15,7 +15,7 @@ const Signup = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const apiurl = import.meta.env.VITE_API_URL + "/user/signup";
+  const apiurl = `${import.meta.env.VITE_API_URL}/user/signup`;
   // const localurl = "http://localhost:3000/api/v1/user/signin";
 
   const handleSubmit = async (e) => {
