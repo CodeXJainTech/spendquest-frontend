@@ -58,7 +58,7 @@ const Dashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
-    window.location.href = "/signin";
+    window.location.href = "/dashboard";
   };
 
   const goToSendMoney = (payee_username) => {
@@ -167,7 +167,7 @@ const Dashboard = () => {
       <div className="flex flex-1 pt-14">
         {/* Sidebar Desktop */}
         <div className="bg-[#273469] text-white w-64 p-4 fixed h-full hidden md:block">
-          <h2 className="text-lg font-bold mb-8">{userInfo.name}'s Dashboard</h2>
+          <h2 className="text-lg font-bold mb-8">{userInfo.name}</h2>
           <ul className="space-y-2">
             {menuItems.map((item) => (
               <li key={item.name}>

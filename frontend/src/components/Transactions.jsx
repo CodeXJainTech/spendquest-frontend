@@ -32,21 +32,6 @@ const Transactions = ({ transactions, refreshDashboard, authAxios }) => {
     }
   };
 
-  if (!transactions || transactions.length === 0) {
-    return (
-      <div className="p-4 text-gray-500 text-center">
-        No transactions found.
-        <button
-          onClick={() => setShowModal(true)}
-          className="ml-4 btn-primary px-4 py-2 rounded"
-        >
-          Add Transaction
-        </button>
-        {showModal && renderModal()}
-      </div>
-    );
-  }
-
   const renderModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-96">
@@ -99,6 +84,21 @@ const Transactions = ({ transactions, refreshDashboard, authAxios }) => {
     </div>
   );
 
+  if (!transactions || transactions.length === 0) {
+    return (
+      <div className="p-4 text-gray-500 text-center">
+        No transactions found.
+        <button
+          onClick={() => setShowModal(true)}
+          className="ml-4 btn-primary px-4 py-2 rounded"
+        >
+          Add Transaction
+        </button>
+        {showModal && renderModal()}
+      </div>
+    );
+  }
+  
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
