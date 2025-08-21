@@ -41,7 +41,7 @@ Tracking money shouldn’t be a chore — it should be a **quest**.
 
 
 ## Backend
- **You can check backend logic on request Herr->**
+ **You can check backend logic on request Here->**
  https://github.com/CodeXJainTech/spendquest-backend
  
 ---# spendquest-frontend
