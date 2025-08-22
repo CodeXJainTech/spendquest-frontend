@@ -1,13 +1,13 @@
-import React from "react";
+import mainLogo from '../assets/mainLogo.png';
 
 const FakeDashboard = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#f5f5f5] px-4">
       {/* Logo */}
       <img
-        src="/logo192.png" // Replace with your logo
+        src={mainLogo}
         alt="SpendQuest"
-        className="w-24 h-24 mb-4 drop-shadow-md"
+        className="w-[700px] h-[300px] mb-4 drop-shadow-md opacity-90 border rounded-xl"
       />
 
       {/* Title */}
