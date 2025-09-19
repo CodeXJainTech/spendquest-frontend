@@ -12,7 +12,7 @@ const FakeDashboard = () => {
     try {
       const res = await axios.post(
         apiurl,
-        { userName: "pika@p.com", password: "123456" },
+        { userName: "demo@spendquest.com", password: "123456" },
         { headers: { "Content-Type": "application/json" } }
       );
 
