@@ -24,7 +24,7 @@ const Signup = () => {
 
     const payload = {
       ...form,
-      s_balance: Number(form.s_balance) // backend expects number type
+      s_balance: Number(form.s_balance)
     };
 
     try {
@@ -36,7 +36,6 @@ const Signup = () => {
 
       console.log("✅ Signup success:", res.data);
 
-      // Store auth details for later requests
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.userId);
 
@@ -58,7 +57,6 @@ const Signup = () => {
         </h2>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {/* Email / Username */}
           <div>
             <label className="block text-sm mb-1 text-[#1e2749]">Email</label>
             <input
@@ -71,8 +69,6 @@ const Signup = () => {
               required
             />
           </div>
-
-          {/* First Name */}
           <div>
             <label className="block text-sm mb-1 text-[#1e2749]">First Name</label>
             <input
@@ -86,7 +82,6 @@ const Signup = () => {
             />
           </div>
 
-          {/* Last Name */}
           <div>
             <label className="block text-sm mb-1 text-[#1e2749]">Last Name</label>
             <input
@@ -100,7 +95,6 @@ const Signup = () => {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="block text-sm mb-1 text-[#1e2749]">Password</label>
             <input
@@ -113,8 +107,6 @@ const Signup = () => {
               required
             />
           </div>
-
-          {/* Starting Balance */}
           <div>
             <label className="block text-sm mb-1 text-[#1e2749]">
               Starting Balance
@@ -132,7 +124,6 @@ const Signup = () => {
             />
           </div>
 
-          {/* Button */}
           <button type="submit" className="btn-primary w-full">
             Sign Up
           </button>
