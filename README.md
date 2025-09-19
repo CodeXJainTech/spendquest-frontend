@@ -44,11 +44,11 @@ Tracking money shouldn’t be a chore — it should be a **quest**.
 ## Demo Credentials:
 **First demo user**
 username: demo@spendquest.com
-password: 123456(can be changed by users. will be updated in time.)
+password: 123456(can't be changed)
 
 **second demo user**
 username: demo@spendquest1.com
-password: 123456(can be changed by users)
+password: 123456(can't be changed)
 
 
 ## Backend
