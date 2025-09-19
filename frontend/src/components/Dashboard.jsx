@@ -38,6 +38,23 @@ const Dashboard = () => {
     [apiurl, token, userId]
   );
 
+  //update browser url to get back to previous section
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      setActivePage(hash);
+    }
+
+    const onHashChange = () => {
+      const newHash = window.location.hash.replace("#", "");
+      setActivePage(newHash || "Dashboard");
+    };
+
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -79,6 +96,7 @@ const Dashboard = () => {
 
   const goToSendMoney = (payee_username) => {
     setSelectedPayee(payee_username);
+    window.location.hash = "SendMoney";
     setActivePage("SendMoney");
     setIsSidebarOpen(false);
   };
@@ -113,6 +131,7 @@ const Dashboard = () => {
             balance={balance}
             transactions={transactions}
             payees={payees}
+            setActivePage = {setActivePage}
             {...commonProps}
           />
         );
@@ -192,6 +211,7 @@ const Dashboard = () => {
   ];
 
   const handleMenuClick = (itemName) => {
+    window.location.hash = itemName;
     setActivePage(itemName);
     setIsSidebarOpen(false);
   };

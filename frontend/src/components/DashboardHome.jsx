@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const DashboardHome = ({ balance, transactions = [] }) => {
+const DashboardHome = ({ balance, transactions = [], setActivePage }) => {
 
   const monthTxns = transactions.filter((t) => {
     const d = new Date(t.date);
@@ -55,7 +55,7 @@ const DashboardHome = ({ balance, transactions = [] }) => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="col-span-1">
-          <Wallet balance={balance} />
+          <Wallet balance={balance} setActivePage={setActivePage}/>
         </div>
 
         <div className="col-span-2 bg-white p-3 rounded-lg shadow-md flex flex-col justify-between">
