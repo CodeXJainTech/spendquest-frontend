@@ -42,7 +42,7 @@ const Budgets = ({ authAxios, budgets, setBudgets, refreshDashboard }) => {
       </div>
 
       {budgets.length === 0 ? (
-        <p className="text-gray-500">No budgets created yet.</p>
+        <p className="text-gray-500">No budgets created yet. Please enter the category field in transaction same as budget title to track expenses of it.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {budgets.map((b) => (

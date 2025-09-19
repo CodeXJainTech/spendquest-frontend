@@ -42,7 +42,7 @@ const Goals = ({ authAxios, goals, setGoals, refreshDashboard }) => {
       </div>
 
       {goals.length === 0 ? (
-        <p className="text-gray-500">No goals created yet.</p>
+        <p className="text-gray-500">No goals created yet.Please enter the category field in transaction same as Goal title to track saving of it.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {goals.map((g) => (
