@@ -40,6 +40,17 @@ Tracking money shouldn’t be a chore — it should be a **quest**.
 > This app is ideal for self-budgeting, mock transfers, or prototyping spending behavior.
 
 
+
+## Demo Credentials:
+**First demo user**
+username: demo@spendquest.com
+password: 123456(can be changed by users. will be updated in time.)
+
+**second demo user**
+username: demo@spendquest1.com
+password: 123456(can be changed by users)
+
+
 ## Backend
  **You can check backend logic on request Here->**
  https://github.com/CodeXJainTech/spendquest-backend
