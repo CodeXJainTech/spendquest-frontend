@@ -220,7 +220,7 @@ const Dashboard = () => {
     <div className="flex flex-col h-screen bg-[#fafaff]">
       {/* Top Bar */}
       <div className="h-14 px-6 flex items-center justify-between bg-[#273469] text-white fixed top-0 left-0 right-0 z-50 shadow">
-        <div className="font-bold text-2xl">SpendQuest App</div>
+        <div className="font-[cursive] text-2xl">SpendQuest App</div>
 
         {/* Mobile Menu Icon */}
         <div className="md:hidden">
@@ -265,9 +265,6 @@ const Dashboard = () => {
       <div className="flex flex-1 pt-14">
         {/* Sidebar Desktop */}
         <div className="bg-[#273469] text-white w-64 p-4 fixed h-full hidden md:block">
-          <h2 className="text-lg font-bold mb-8">
-            {userInfo.name || "User"}
-          </h2>
           <ul className="space-y-2">
             {menuItems.map((item) => (
               <li key={item.name}>

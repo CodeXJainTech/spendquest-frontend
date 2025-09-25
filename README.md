@@ -6,12 +6,14 @@
 
 ## 🚀 Features
 
-- 💸 **Manual Expense Logging** — Add transactions with amount, date, and description  
+- 💸 **Manual Expense Logging** — Add transactions with amount, date, and description 
+- 💸 **AI receipt scanning** — Add Recipt image to fill the data automatically.  
 - 👥 **Simulated Transfers** — “Send” money to friends or merchants to track payments *(no real money moves)*  
 - 🔐 **Signed-in Payee Linking** — You can send to payees who are signed in; otherwise, just log the name and transaction manually  
 - 📊 **Spending Overview** — View where your money goes, by payee or category  
 - 🔒 **Local-Only / Privacy-Friendly** — No real money used or stored; great for cash and budget tracking  
 - 🎯 **Simple & Fast UI** — Designed for quick entries and daily usage  
+
 
 ---
 
