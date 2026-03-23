@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Signin() {
-  const [form, setForm]   = useState({ userName:"", password:"" });
+  const [form, setForm]    = useState({ userName:"", password:"" });
   const [loading, setLoad] = useState(false);
   const [error, setError]  = useState("");
   const [showPw, setShowPw] = useState(false);
 
-  const submit = async (e) => {
-    e.preventDefault(); setLoad(true); setError("");
+  const doLogin = async (credentials) => {
+    setLoad(true); setError("");
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/signin`, form);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/signin`, credentials);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.userId);
       window.location.href = "/dashboard";
@@ -20,6 +20,9 @@ export default function Signin() {
       setLoad(false);
     }
   };
+
+  const submit    = (e) => { e.preventDefault(); doLogin(form); };
+  const loginDemo = () => doLogin({ userName: "demo@spendquest.com", password: "demo123" });
 
   return (
     <div style={{ minHeight:"100vh", display:"flex", background:"var(--bg)" }}>
@@ -87,7 +90,27 @@ export default function Signin() {
             )}
 
             <button type="submit" className="btn btn-primary" style={{ width:"100%", padding:"12px", fontSize:"0.95rem", marginTop:4 }} disabled={loading}>
-              {loading ? <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="spin"><circle cx="12" cy="12" r="9" strokeDasharray="28 56"/></svg> Signing in…</> : "Sign In"}
+              {loading
+                ? <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="spin"><circle cx="12" cy="12" r="9" strokeDasharray="28 56"/></svg> Signing in…</>
+                : "Sign In"}
+            </button>
+
+            {/* Divider */}
+            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+              <div style={{ flex:1, height:1, background:"var(--border)" }}/>
+              <span style={{ fontSize:"0.72rem", color:"var(--t4)", fontWeight:500, letterSpacing:"0.04em" }}>OR</span>
+              <div style={{ flex:1, height:1, background:"var(--border)" }}/>
+            </div>
+
+            {/* Demo button */}
+            <button type="button" onClick={loginDemo} disabled={loading}
+              className="btn btn-ghost" style={{ width:"100%", padding:"12px", fontSize:"0.875rem" }}>
+              <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+              </svg>
+              Try Demo Account
             </button>
           </form>
 
