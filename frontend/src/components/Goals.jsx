@@ -1,121 +1,126 @@
 import React, { useState } from "react";
-import { FiTrash } from "react-icons/fi";
+import { toast } from "./Toast";
 
-const Goals = ({ authAxios, goals, setGoals, refreshDashboard }) => {
+export default function Goals({ authAxios, goals, setGoals, refreshDashboard }) {
   const [showAdd, setShowAdd] = useState(false);
-  const [form, setForm] = useState({ title: "", target: "" });
+  const [form, setForm]       = useState({ title:"", target:"" });
+  const [adding, setAdding]   = useState(false);
+  const [deletingId, setDel]  = useState(null);
 
-  const addGoal = async (e) => {
-    e.preventDefault();
+  const add = async (e) => {
+    e.preventDefault(); setAdding(true);
     try {
-      const res = await authAxios.post("account/goals", {
-        title: form.title,
-        target: Number(form.target),
-      });
-      setGoals((prev) => [...prev, res.data]);
-      setShowAdd(false);
-      setForm({ title: "", target: "" });
-      refreshDashboard();
-    } catch (err) {
-      console.error("Add goal failed", err);
-    }
+      const res = await authAxios.post("account/goals", { title:form.title, target:Number(form.target) });
+      setGoals(p => [...p, res.data]); setShowAdd(false); setForm({ title:"", target:"" });
+      toast.success(`Goal "${form.title}" created`); refreshDashboard();
+    } catch { toast.error("Failed to create goal"); } finally { setAdding(false); }
   };
-
-  const deleteGoal = async (id) => {
-    if (!window.confirm("Delete this goal?")) return;
+  const del = async (id, title) => {
+    setDel(id);
     try {
       await authAxios.delete(`account/goals/${id}`);
-      setGoals((prev) => prev.filter((g) => g._id !== id));
-      refreshDashboard();
-    } catch (err) {
-      console.error("Delete goal failed", err);
-    }
+      setGoals(p => p.filter(g => g._id !== id));
+      toast.info(`"${title}" deleted`); refreshDashboard();
+    } catch { toast.error("Failed to delete"); } finally { setDel(null); }
   };
 
+  const totalTarget  = goals.reduce((s,g) => s + g.target, 0);
+  const totalSaved   = goals.reduce((s,g) => s + (g.progress||0), 0);
+  const doneCount    = goals.filter(g => (g.progress||0) >= g.target).length;
+
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#273469]">Goals</h1>
-        <button onClick={() => setShowAdd(true)} className="btn-primary">
-          + Add Goal
+    <div style={{ display:"flex", flexDirection:"column", gap:20 }} className="animate-fade-up">
+      <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", flexWrap:"wrap", gap:12 }}>
+        <div>
+          <div className="page-title">Goals</div>
+          <div style={{ fontSize:"0.8rem", color:"var(--t4)", marginTop:3 }}>Savings targets • match transaction category names to track</div>
+        </div>
+        <button onClick={() => setShowAdd(true)} className="btn btn-primary">
+          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Goal
         </button>
       </div>
 
-      {goals.length === 0 ? (
-        <p className="text-gray-500">No goals created yet.Please enter the category field in transaction same as Goal title to track saving of it.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {goals.map((g) => (
-            <div
-              key={g._id}
-              className="relative bg-white p-4 rounded shadow border"
-            >
-              <button
-                onClick={() => deleteGoal(g._id)}
-                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-              >
-                <FiTrash size={18} />
-              </button>
-              <h2 className="font-semibold text-lg">{g.title}</h2>
-              <p className="text-sm text-gray-500">Target: ₹{g.target}</p>
-              <div className="mt-3 w-full bg-gray-200 rounded h-3">
-                <div
-                  className={`${
-                    g.progress >= g.target ? "bg-green-500" : "bg-red-500"
-                  } h-3 rounded`}
-                  style={{
-                    width: `${Math.min(
-                      100,
-                      (g.progress / g.target) * 100
-                    )}%`,
-                  }}
-                ></div>
-              </div>
-              <p className="text-sm mt-1 text-gray-600">
-                Saved: ₹{g.progress || 0} / ₹{g.target}
-              </p>
+      {goals.length > 0 && (
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(180px, 1fr))", gap:12 }}>
+          {[
+            { label:"Total Target",  value:`₹${totalTarget.toLocaleString("en-IN")}`, color:"var(--brand)" },
+            { label:"Total Saved",   value:`₹${totalSaved.toLocaleString("en-IN")}`, color:"var(--green)" },
+            { label:"Goals Achieved",value:doneCount, color: doneCount > 0 ? "var(--green)" : "var(--t2)" },
+            { label:"In Progress",   value:goals.length - doneCount, color:"var(--amber)" },
+          ].map(s => (
+            <div key={s.label} className="card" style={{ padding:"16px 20px" }}>
+              <div style={{ fontSize:"0.72rem", fontWeight:700, color:"var(--t4)", textTransform:"uppercase", letterSpacing:"0.06em", marginBottom:6 }}>{s.label}</div>
+              <div style={{ fontFamily:"var(--font-display)", fontWeight:800, fontSize:"1.4rem", color:s.color, letterSpacing:"-0.02em" }}>{s.value}</div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Goal Modal */}
+      {goals.length === 0 ? (
+        <div className="card" style={{ textAlign:"center", padding:"64px 24px" }}>
+          <div className="empty-icon" style={{ margin:"0 auto 16px" }}>
+            <svg width="24" height="24" fill="none" stroke="var(--brand)" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <div className="section-title" style={{ marginBottom:6 }}>No goals yet</div>
+          <div style={{ color:"var(--t4)", fontSize:"0.875rem" }}>Create a savings goal and track your progress</div>
+        </div>
+      ) : (
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(300px, 1fr))", gap:16 }}>
+          {goals.map(g => {
+            const progress = g.progress || 0;
+            const pct  = Math.min(100, (progress / g.target) * 100);
+            const done = progress >= g.target;
+            const isDeleting = deletingId === g._id;
+
+            return (
+              <div key={g._id} className="card card-p" style={{ opacity: isDeleting ? 0.5 : 1, transition:"opacity 0.2s" }}>
+                <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:16 }}>
+                  <div>
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:3 }}>
+                      <div style={{ fontFamily:"var(--font-display)", fontWeight:700, fontSize:"1rem", color:"var(--t1)" }}>{g.title}</div>
+                      {done && <span className="badge badge-green">✓ Achieved!</span>}
+                    </div>
+                    <div style={{ fontSize:"0.75rem", color:"var(--t4)" }}>Target: ₹{Number(g.target).toLocaleString("en-IN")}</div>
+                  </div>
+                  <button disabled={isDeleting} onClick={() => del(g._id, g.title)} className="btn btn-icon btn-danger">
+                    {isDeleting ? <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="spin"><circle cx="12" cy="12" r="9" strokeDasharray="28 56"/></svg>
+                      : <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>}
+                  </button>
+                </div>
+
+                <div className="progress-track" style={{ marginBottom:10 }}>
+                  <div className="progress-fill" style={{ width:`${pct}%`, background: done ? "var(--green)" : "var(--brand)" }}/>
+                </div>
+
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                  <span style={{ fontSize:"0.8rem", color:"var(--t2)" }}>
+                    <strong style={{ color:"var(--t1)", fontFamily:"var(--font-display)" }}>₹{progress.toLocaleString("en-IN")}</strong> saved
+                  </span>
+                  <span className="badge badge-brand">{pct.toFixed(0)}% complete</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {showAdd && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded w-96">
-            <h3 className="font-semibold text-lg mb-4">New Goal</h3>
-            <form className="space-y-3" onSubmit={addGoal}>
-              <input
-                name="title"
-                value={form.title}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, title: e.target.value }))
-                }
-                placeholder="Goal (e.g. Laptop)"
-                className="w-full border rounded px-3 py-2"
-                required
-              />
-              <input
-                name="target"
-                type="number"
-                value={form.target}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, target: e.target.value }))
-                }
-                placeholder="Target amount"
-                className="w-full border rounded px-3 py-2"
-                required
-              />
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAdd(false)}
-                  className="px-4 py-2 bg-gray-200 rounded"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn-primary">
-                  Add
+        <div className="modal-backdrop" onClick={e => e.target === e.currentTarget && setShowAdd(false)}>
+          <div className="modal">
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:22 }}>
+              <div style={{ fontFamily:"var(--font-display)", fontWeight:700, fontSize:"1.1rem" }}>New Goal</div>
+              <button onClick={() => setShowAdd(false)} style={{ background:"none", border:"none", cursor:"pointer", color:"var(--t4)", padding:4, display:"flex" }}>
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <form onSubmit={add} style={{ display:"flex", flexDirection:"column", gap:14 }}>
+              <div><label className="label">Goal Name</label><input value={form.title} onChange={e => setForm(f=>({...f,title:e.target.value}))} className="input" placeholder="e.g. New Laptop, Emergency Fund" required/></div>
+              <div><label className="label">Target Amount (₹)</label><input type="number" min="1" value={form.target} onChange={e => setForm(f=>({...f,target:e.target.value}))} className="input" placeholder="0" required/></div>
+              <div style={{ display:"flex", gap:10, marginTop:4 }}>
+                <button type="button" onClick={() => setShowAdd(false)} className="btn btn-ghost" style={{ flex:1 }}>Cancel</button>
+                <button type="submit" className="btn btn-primary" style={{ flex:1 }} disabled={adding}>
+                  {adding ? "Creating…" : "Create Goal"}
                 </button>
               </div>
             </form>
@@ -124,6 +129,4 @@ const Goals = ({ authAxios, goals, setGoals, refreshDashboard }) => {
       )}
     </div>
   );
-};
-
-export default Goals;
+}
