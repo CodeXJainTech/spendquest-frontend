@@ -22,7 +22,7 @@ export default function Signin() {
   };
 
   const submit    = (e) => { e.preventDefault(); doLogin(form); };
-  const loginDemo = () => doLogin({ userName: "demo@spendquest.com", password: "demo123" });
+  const loginDemo = () => doLogin({ userName: "demo@spendquest.com", password: "123456" });
 
   return (
     <div style={{ minHeight:"100vh", display:"flex", background:"var(--bg)" }}>
