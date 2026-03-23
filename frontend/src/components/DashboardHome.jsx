@@ -22,55 +22,27 @@ const fmt = (n) =>
 
 const StatCard = ({ label, value, sub, accent, icon, delay = "" }) => (
   <div
-    className={`card card-p animate-fade-up ${delay}`}
-    style={{ display: "flex", flexDirection: "column", gap: 16 }}
+    className={`bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex flex-col gap-4 animate-fade-up ${delay}`}
   >
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
-    >
-      <span
-        style={{
-          fontSize: "0.75rem",
-          fontWeight: 600,
-          color: "var(--t3)",
-          textTransform: "uppercase",
-          letterSpacing: "0.06em",
-        }}
-      >
+    <div className="flex items-center justify-between">
+      <span className="text-[0.75rem] font-semibold text-gray-500 uppercase tracking-widest">
         {label}
       </span>
       <div
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: "10px",
-          background: accent + "18",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: accent,
-          fontSize: "1.1rem",
-        }}
+        className="w-9 h-9 rounded-[10px] flex items-center justify-center text-[1.1rem]"
+        style={{ background: accent + "18", color: accent }}
       >
         {icon}
       </div>
     </div>
     <div>
       <div
-        className="stat-number"
-        style={{ color: accent !== "var(--brand)" ? accent : "var(--t1)" }}
+        className="font-extrabold text-[1.6rem] tracking-[-0.03em] leading-none"
+        style={{ color: accent !== "#4F46E5" ? accent : "#0F1117" }}
       >
         {value}
       </div>
-      {sub && (
-        <div style={{ fontSize: "0.75rem", color: "var(--t4)", marginTop: 4 }}>
-          {sub}
-        </div>
-      )}
+      {sub && <div className="text-[0.75rem] text-gray-400 mt-1">{sub}</div>}
     </div>
   </div>
 );
@@ -79,33 +51,11 @@ const TxTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
     <div
-      style={{
-        background: "var(--t1)",
-        color: "#fff",
-        borderRadius: "10px",
-        padding: "10px 14px",
-        fontSize: "0.8rem",
-        boxShadow: "var(--shadow-lg)",
-      }}
+      className="rounded-[10px] px-3.5 py-2.5 text-[0.8rem] shadow-lg"
+      style={{ background: "#0F1117", color: "#fff" }}
     >
-      <div
-        style={{
-          color: "rgba(255,255,255,0.55)",
-          fontSize: "0.7rem",
-          marginBottom: 3,
-        }}
-      >
-        Txn #{label}
-      </div>
-      <div
-        style={{
-          fontFamily: "var(--font-display)",
-          fontWeight: 700,
-          fontSize: "1rem",
-        }}
-      >
-        {fmt(payload[0].value)}
-      </div>
+      <div className="text-white/55 text-[0.7rem] mb-0.5">Txn #{label}</div>
+      <div className="font-bold text-[1rem]">{fmt(payload[0].value)}</div>
     </div>
   );
 };
@@ -149,7 +99,6 @@ export default function DashboardHome({
   const savings =
     income === 0 ? 0 : Math.max(0, ((income - expense) / income) * 100);
 
-  // Balance trend
   const recentTxns = transactions.slice(-20);
   let startBal = balance;
   for (
@@ -169,7 +118,6 @@ export default function DashboardHome({
     return { txn: i + 1, balance: running };
   });
 
-  // Category breakdown
   const categoryData = useMemo(() => {
     const map = {};
     monthTxns
@@ -184,80 +132,29 @@ export default function DashboardHome({
   }, [monthTxns]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="flex flex-col gap-5">
       {/* Hero balance card */}
       <div
-        className="animate-fade-up"
+        className="animate-fade-up relative overflow-hidden rounded-3xl px-8 pt-8 pb-7 text-white"
         style={{
-          borderRadius: "var(--r-2xl)",
-          padding: "32px 32px 28px",
           background:
             "linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%)",
-          color: "#fff",
-          position: "relative",
-          overflow: "hidden",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: -40,
-            right: -40,
-            width: 200,
-            height: 200,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.04)",
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: -60,
-            left: 60,
-            width: 160,
-            height: 160,
-            borderRadius: "50%",
-            background: "rgba(129,140,248,0.1)",
-            pointerEvents: "none",
-          }}
-        />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <div
-            style={{
-              fontSize: "0.72rem",
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              color: "rgba(199,210,254,0.7)",
-              marginBottom: 10,
-            }}
-          >
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/[0.04] pointer-events-none" />
+        <div className="absolute -bottom-14 left-14 w-40 h-40 rounded-full bg-indigo-400/10 pointer-events-none" />
+        <div className="relative z-10">
+          <div className="text-[0.72rem] font-bold uppercase tracking-[0.1em] text-indigo-200/70 mb-2.5">
             Total Balance
           </div>
-          <div
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(2rem,5vw,3rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.04em",
-              lineHeight: 1,
-              marginBottom: 6,
-            }}
-          >
+          <div className="text-[clamp(2rem,5vw,3rem)] font-extrabold tracking-[-0.04em] leading-none mb-1.5">
             ₹
             {balance.toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
           </div>
-          <div
-            style={{
-              fontSize: "0.8rem",
-              color: "rgba(199,210,254,0.6)",
-              marginBottom: 24,
-            }}
-          >
+          <div className="text-[0.8rem] text-indigo-200/60 mb-6">
             Available funds
           </div>
           <button
@@ -265,15 +162,7 @@ export default function DashboardHome({
               window.location.hash = "Transactions";
               setActivePage("Transactions");
             }}
-            className="btn"
-            style={{
-              background: "rgba(255,255,255,0.12)",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.2)",
-              backdropFilter: "blur(8px)",
-              fontSize: "0.8rem",
-              padding: "8px 18px",
-            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/[0.12] hover:bg-white/20 border border-white/20 text-white text-[0.8rem] font-semibold cursor-pointer transition backdrop-blur-sm"
           >
             <svg
               width="14"
@@ -293,17 +182,14 @@ export default function DashboardHome({
 
       {/* Stat cards */}
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: 16,
-        }}
+        className="grid gap-4"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
       >
         <StatCard
           label="Income"
           value={fmt(income)}
           sub="This month"
-          accent="var(--green)"
+          accent="#10B981"
           icon="↑"
           delay="stagger-1"
         />
@@ -311,7 +197,7 @@ export default function DashboardHome({
           label="Expenses"
           value={fmt(expense)}
           sub="This month"
-          accent="var(--red)"
+          accent="#EF4444"
           icon="↓"
           delay="stagger-2"
         />
@@ -319,7 +205,7 @@ export default function DashboardHome({
           label="Savings Rate"
           value={`${savings.toFixed(0)}%`}
           sub="Of income saved"
-          accent="var(--brand)"
+          accent="#4F46E5"
           icon="◎"
           delay="stagger-3"
         />
@@ -335,24 +221,18 @@ export default function DashboardHome({
 
       {/* Chart row */}
       <div
+        className="grid gap-4"
         style={{
-          display: "grid",
           gridTemplateColumns: categoryData.length > 0 ? "1fr 340px" : "1fr",
-          gap: 16,
         }}
       >
         {/* Balance trend */}
-        <div className="card card-p animate-fade-up stagger-1">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 20,
-            }}
-          >
-            <div className="section-title">Balance Trend</div>
-            <span className="badge badge-brand">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 animate-fade-up stagger-1">
+          <div className="flex items-center justify-between mb-5">
+            <div className="font-bold text-[1rem] text-[#0F1117]">
+              Balance Trend
+            </div>
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.72rem] font-semibold bg-indigo-50 text-indigo-700">
               Last {graphData.length} txns
             </span>
           </div>
@@ -371,17 +251,17 @@ export default function DashboardHome({
                   </defs>
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="var(--border)"
+                    stroke="#E5E7EB"
                     vertical={false}
                   />
                   <XAxis
                     dataKey="txn"
-                    tick={{ fontSize: 11, fill: "var(--t4)" }}
+                    tick={{ fontSize: 11, fill: "#9CA3AF" }}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fontSize: 11, fill: "var(--t4)" }}
+                    tick={{ fontSize: 11, fill: "#9CA3AF" }}
                     axisLine={false}
                     tickLine={false}
                     width={56}
@@ -405,16 +285,7 @@ export default function DashboardHome({
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--t4)",
-                  fontSize: "0.875rem",
-                }}
-              >
+              <div className="h-full flex items-center justify-center text-gray-400 text-[0.875rem]">
                 Not enough data yet
               </div>
             )}
@@ -423,8 +294,8 @@ export default function DashboardHome({
 
         {/* Category pie */}
         {categoryData.length > 0 && (
-          <div className="card card-p animate-fade-up stagger-2">
-            <div className="section-title" style={{ marginBottom: 16 }}>
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 animate-fade-up stagger-2">
+            <div className="font-bold text-[1rem] text-[#0F1117] mb-4">
               Spending by Category
             </div>
             <div style={{ height: 220 }}>
@@ -452,9 +323,7 @@ export default function DashboardHome({
                     iconType="circle"
                     iconSize={8}
                     formatter={(v) => (
-                      <span style={{ fontSize: "0.72rem", color: "var(--t2)" }}>
-                        {v}
-                      </span>
+                      <span className="text-[0.72rem] text-gray-600">{v}</span>
                     )}
                   />
                 </PieChart>
@@ -465,130 +334,111 @@ export default function DashboardHome({
       </div>
 
       {/* Recent transactions */}
-      <div
-        className="card animate-fade-up stagger-2"
-        style={{ overflow: "hidden" }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "18px 20px 14px",
-          }}
-        >
-          <div className="section-title">Recent Transactions</div>
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden animate-fade-up stagger-2">
+        <div className="flex items-center justify-between px-5 pt-4 pb-3">
+          <div className="font-bold text-[1rem] text-[#0F1117]">
+            Recent Transactions
+          </div>
           <button
             onClick={() => {
               window.location.hash = "Transactions";
               setActivePage("Transactions");
             }}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "0.8rem",
-              color: "var(--brand)",
-              fontWeight: 600,
-              fontFamily: "var(--font-body)",
-            }}
+            className="bg-transparent border-none cursor-pointer text-[0.8rem] text-indigo-600 font-semibold hover:underline"
           >
             View all →
           </button>
         </div>
         {transactions.length === 0 ? (
-          <div className="empty-state">
-            <div style={{ color: "var(--t4)", fontSize: "0.875rem" }}>
+          <div className="flex flex-col items-center justify-center py-16 gap-3">
+            <div className="text-gray-400 text-[0.875rem]">
               No transactions yet
             </div>
           </div>
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Category</th>
-                <th style={{ textAlign: "right" }}>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.slice(0, 7).map((txn) => (
-                <tr key={txn._id || txn.id}>
-                  <td>
-                    <div
-                      style={{ display: "flex", alignItems: "center", gap: 10 }}
-                    >
-                      <div
-                        style={{
-                          width: 32,
-                          height: 32,
-                          borderRadius: "8px",
-                          background: txn.isReceived
-                            ? "var(--green-bg)"
-                            : "var(--red-bg)",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <svg
-                          width="14"
-                          height="14"
-                          fill="none"
-                          stroke={
-                            txn.isReceived ? "var(--green)" : "var(--red)"
-                          }
-                          strokeWidth="2.5"
-                          viewBox="0 0 24 24"
-                        >
-                          {txn.isReceived ? (
-                            <>
-                              <line x1="12" y1="19" x2="12" y2="5" />
-                              <polyline points="5 12 12 5 19 12" />
-                            </>
-                          ) : (
-                            <>
-                              <line x1="12" y1="5" x2="12" y2="19" />
-                              <polyline points="19 12 12 19 5 12" />
-                            </>
-                          )}
-                        </svg>
-                      </div>
-                      <span style={{ fontWeight: 500, color: "var(--t1)" }}>
-                        {txn.description}
-                      </span>
-                    </div>
-                  </td>
-                  <td style={{ color: "var(--t3)" }}>
-                    {new Date(txn.date).toLocaleDateString("en-IN", {
-                      day: "numeric",
-                      month: "short",
-                    })}
-                  </td>
-                  <td>
-                    {txn.category ? (
-                      <span className="badge badge-brand">{txn.category}</span>
-                    ) : (
-                      <span style={{ color: "var(--t4)" }}>—</span>
-                    )}
-                  </td>
-                  <td
-                    style={{
-                      textAlign: "right",
-                      fontWeight: 700,
-                      fontFamily: "var(--font-display)",
-                      color: txn.isReceived ? "var(--green)" : "var(--red)",
-                    }}
-                  >
-                    {txn.isReceived ? "+" : "−"}₹
-                    {Number(txn.amount).toLocaleString("en-IN")}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="px-4 py-2.5 text-left text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Description
+                  </th>
+                  <th className="px-4 py-2.5 text-left text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Date
+                  </th>
+                  <th className="px-4 py-2.5 text-left text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Category
+                  </th>
+                  <th className="px-4 py-2.5 text-right text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Amount
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {transactions.slice(0, 7).map((txn) => (
+                  <tr
+                    key={txn._id || txn.id}
+                    className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-4 py-3.5">
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${txn.isReceived ? "bg-emerald-50" : "bg-red-50"}`}
+                        >
+                          <svg
+                            width="14"
+                            height="14"
+                            fill="none"
+                            stroke={txn.isReceived ? "#10B981" : "#EF4444"}
+                            strokeWidth="2.5"
+                            viewBox="0 0 24 24"
+                          >
+                            {txn.isReceived ? (
+                              <>
+                                <line x1="12" y1="19" x2="12" y2="5" />
+                                <polyline points="5 12 12 5 19 12" />
+                              </>
+                            ) : (
+                              <>
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <polyline points="19 12 12 19 5 12" />
+                              </>
+                            )}
+                          </svg>
+                        </div>
+                        <span className="font-medium text-[#0F1117] text-[0.875rem]">
+                          {txn.description}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3.5 text-gray-500 text-[0.875rem]">
+                      {new Date(txn.date).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                      })}
+                    </td>
+                    <td className="px-4 py-3.5">
+                      {txn.category ? (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.72rem] font-semibold bg-indigo-50 text-indigo-700">
+                          {txn.category}
+                        </span>
+                      ) : (
+                        <span className="text-gray-300">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3.5 text-right">
+                      <span
+                        className={`font-bold text-[0.95rem] ${txn.isReceived ? "text-emerald-600" : "text-red-500"}`}
+                      >
+                        {txn.isReceived ? "+" : "−"}₹
+                        {Number(txn.amount).toLocaleString("en-IN")}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

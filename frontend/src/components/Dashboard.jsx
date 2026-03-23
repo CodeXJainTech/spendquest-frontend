@@ -236,13 +236,11 @@ export default function Dashboard() {
     localStorage.removeItem("userId");
     window.location.href = "/dashboard";
   };
-
   const navigate = (name) => {
     window.location.hash = name;
     setActivePage(name);
     setMobileOpen(false);
   };
-
   const goToSendMoney = (username) => {
     setSelectedPayee(username);
     navigate("SendMoney");
@@ -329,159 +327,65 @@ export default function Dashboard() {
 
   const initial = userInfo.name ? userInfo.name[0].toUpperCase() : "?";
 
-  const Sidebar = ({ mobile = false }) => (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        padding: "0 12px 20px",
-      }}
-    >
+  const Sidebar = () => (
+    <div className="flex flex-col h-full px-3 pb-5">
       {/* Logo */}
-      <div
-        style={{
-          padding: "20px 4px 28px",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
-          marginBottom: "16px",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "var(--font-display)",
-            fontWeight: 800,
-            fontSize: "1.3rem",
-            color: "#fff",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Spend<span style={{ color: "#818CF8" }}>Quest</span>
+      <div className="px-1 pt-5 pb-7 border-b border-white/[0.07] mb-4">
+        <div className="font-extrabold text-[1.3rem] text-white tracking-tight">
+          Spend<span className="text-indigo-400">Quest</span>
         </div>
       </div>
 
       {/* Nav label */}
-      <div
-        style={{
-          fontSize: "0.65rem",
-          fontWeight: 700,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          color: "rgba(255,255,255,0.28)",
-          padding: "0 4px",
-          marginBottom: "8px",
-        }}
-      >
+      <div className="text-[0.65rem] font-bold tracking-[0.1em] uppercase text-white/[0.28] px-1 mb-2">
         Menu
       </div>
 
       {/* Nav items */}
-      <nav
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          gap: "2px",
-        }}
-      >
-        {NAV.map((item) => (
-          <button
-            key={item.name}
-            onClick={() => navigate(item.name)}
-            className={`nav-item ${activePage === item.name ? "active" : ""}`}
-          >
-            <span
-              style={{
-                opacity: activePage === item.name ? 1 : 0.7,
-                flexShrink: 0,
-              }}
+      <nav className="flex-1 flex flex-col gap-0.5">
+        {NAV.map((item) => {
+          const active = activePage === item.name;
+          return (
+            <button
+              key={item.name}
+              onClick={() => navigate(item.name)}
+              className={`relative flex items-center gap-[11px] w-full px-3 py-2.5 rounded-xl text-left text-[0.875rem] font-medium border-none cursor-pointer transition-all
+                ${
+                  active
+                    ? "bg-indigo-600/[0.22] text-white font-semibold"
+                    : "bg-transparent text-white/55 hover:bg-white/[0.07] hover:text-white"
+                }`}
             >
-              {item.icon}
-            </span>
-            {item.label}
-          </button>
-        ))}
+              {active && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] bg-indigo-500 rounded-r" />
+              )}
+              <span className={active ? "opacity-100" : "opacity-70"}>
+                {item.icon}
+              </span>
+              {item.label}
+            </button>
+          );
+        })}
       </nav>
 
-      {/* User profile at bottom */}
-      <div
-        style={{
-          borderTop: "1px solid rgba(255,255,255,0.07)",
-          paddingTop: "16px",
-          marginTop: "16px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            padding: "8px 10px",
-            borderRadius: "10px",
-            background: "rgba(255,255,255,0.05)",
-          }}
-        >
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: "8px",
-              background: "var(--brand)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#fff",
-              fontWeight: 700,
-              fontSize: "0.85rem",
-              fontFamily: "var(--font-display)",
-              flexShrink: 0,
-            }}
-          >
+      {/* User profile */}
+      <div className="border-t border-white/[0.07] pt-4 mt-4">
+        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-[10px] bg-white/[0.05]">
+          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-[0.85rem] shrink-0">
             {initial}
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div
-              style={{
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                color: "#fff",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
+          <div className="flex-1 min-w-0">
+            <div className="text-[0.8rem] font-semibold text-white truncate">
               {userInfo.name || "User"}
             </div>
-            <div
-              style={{
-                fontSize: "0.7rem",
-                color: "rgba(255,255,255,0.4)",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
+            <div className="text-[0.7rem] text-white/40 truncate">
               {userInfo.email}
             </div>
           </div>
           <button
             onClick={logout}
             title="Sign out"
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "rgba(255,255,255,0.35)",
-              padding: "4px",
-              borderRadius: "6px",
-              flexShrink: 0,
-              transition: "color 0.15s",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = "rgba(239,68,68,0.8)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "rgba(255,255,255,0.35)")
-            }
+            className="shrink-0 p-1 rounded-md text-white/35 hover:text-red-400/80 transition-colors bg-transparent border-none cursor-pointer flex"
           >
             <svg
               width="15"
@@ -502,97 +406,33 @@ export default function Dashboard() {
   );
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        overflow: "hidden",
-        background: "var(--bg)",
-      }}
-    >
-      {/* ── Desktop Sidebar ── */}
-      <aside
-        className="hidden md:flex"
-        style={{
-          width: 232,
-          flexShrink: 0,
-          background: "var(--sidebar-bg)",
-          borderRight: "1px solid var(--sidebar-border)",
-          flexDirection: "column",
-          overflowY: "auto",
-        }}
-      >
+    <div className="flex h-screen overflow-hidden bg-[#F4F6FB]">
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex w-[232px] shrink-0 bg-[#0D1117] border-r border-white/[0.06] flex-col overflow-y-auto">
         <Sidebar />
       </aside>
 
-      {/* ── Mobile Sidebar Overlay ── */}
+      {/* Mobile Sidebar Overlay */}
       {mobileOpen && (
-        <div
-          style={{ position: "fixed", inset: 0, zIndex: 50 }}
-          className="md:hidden"
-        >
+        <div className="fixed inset-0 z-50 md:hidden">
           <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: "rgba(0,0,0,0.6)",
-              backdropFilter: "blur(2px)",
-            }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <aside
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: 240,
-              background: "var(--sidebar-bg)",
-              borderRight: "1px solid var(--sidebar-border)",
-              animation: "slideIn 0.22s ease",
-              overflowY: "auto",
-            }}
-          >
-            <Sidebar mobile />
+          <aside className="absolute left-0 top-0 bottom-0 w-60 bg-[#0D1117] border-r border-white/[0.06] overflow-y-auto sidebar-animate">
+            <Sidebar />
           </aside>
         </div>
       )}
 
-      {/* ── Main area ── */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-        }}
-      >
+      {/* Main area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
         {/* Topbar */}
-        <header
-          style={{
-            height: 58,
-            padding: "0 24px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            background: "var(--bg-card)",
-            borderBottom: "1px solid var(--border)",
-            flexShrink: 0,
-            gap: 16,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <header className="h-[58px] px-6 flex items-center justify-between bg-white border-b border-gray-200 shrink-0 gap-4">
+          <div className="flex items-center gap-3">
             <button
-              className="md:hidden"
+              className="md:hidden bg-transparent border-none cursor-pointer text-gray-600 flex p-1"
               onClick={() => setMobileOpen(true)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                color: "var(--t2)",
-                display: "flex",
-                padding: 4,
-              }}
             >
               <svg
                 width="20"
@@ -608,23 +448,10 @@ export default function Dashboard() {
               </svg>
             </button>
             <div>
-              <div
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 700,
-                  fontSize: "1rem",
-                  color: "var(--t1)",
-                }}
-              >
+              <div className="font-bold text-[1rem] text-[#0F1117]">
                 {NAV.find((n) => n.name === activePage)?.label || "Dashboard"}
               </div>
-              <div
-                style={{
-                  fontSize: "0.72rem",
-                  color: "var(--t4)",
-                  marginTop: 1,
-                }}
-              >
+              <div className="text-[0.72rem] text-gray-400 mt-0.5">
                 {new Date().toLocaleDateString("en-IN", {
                   weekday: "long",
                   year: "numeric",
@@ -635,94 +462,27 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {/* Avatar button */}
-            <div style={{ position: "relative" }}>
+          <div className="flex items-center gap-2.5">
+            <div className="relative">
               <button
                 onClick={() => setUserMenuOpen((v) => !v)}
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: "9px",
-                  background: "var(--brand)",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: "0.85rem",
-                  fontFamily: "var(--font-display)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "var(--shadow-brand)",
-                }}
+                className="w-[34px] h-[34px] rounded-[9px] bg-indigo-600 border-none cursor-pointer text-white font-bold text-[0.85rem] flex items-center justify-center shadow-[0_4px_14px_rgba(79,70,229,0.35)]"
               >
                 {initial}
               </button>
               {userMenuOpen && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 42,
-                    background: "var(--bg-card)",
-                    borderRadius: "var(--r-lg)",
-                    boxShadow: "var(--shadow-xl)",
-                    border: "1px solid var(--border)",
-                    padding: "8px",
-                    minWidth: 200,
-                    zIndex: 40,
-                    animation: "fadeIn 0.15s ease",
-                  }}
-                >
-                  <div
-                    style={{
-                      padding: "10px 12px 12px",
-                      borderBottom: "1px solid var(--border)",
-                      marginBottom: 6,
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontWeight: 600,
-                        fontSize: "0.875rem",
-                        color: "var(--t1)",
-                      }}
-                    >
+                <div className="absolute right-0 top-[42px] bg-white rounded-2xl shadow-[0_20px_25px_rgba(0,0,0,0.09),0_8px_10px_rgba(0,0,0,0.04)] border border-gray-200 p-2 min-w-[200px] z-40 animate-fade-in">
+                  <div className="px-3 py-2.5 pb-3 border-b border-gray-100 mb-1.5">
+                    <div className="font-semibold text-[0.875rem] text-[#0F1117]">
                       {userInfo.name}
                     </div>
-                    <div
-                      style={{
-                        fontSize: "0.75rem",
-                        color: "var(--t4)",
-                        marginTop: 2,
-                      }}
-                    >
+                    <div className="text-[0.75rem] text-gray-400 mt-0.5">
                       {userInfo.email}
                     </div>
                   </div>
                   <button
                     onClick={logout}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      width: "100%",
-                      padding: "8px 12px",
-                      borderRadius: "var(--r-sm)",
-                      border: "none",
-                      background: "none",
-                      cursor: "pointer",
-                      fontSize: "0.875rem",
-                      color: "var(--red)",
-                      fontWeight: 500,
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "var(--red-bg)")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = "none")
-                    }
+                    className="flex items-center gap-2 w-full px-3 py-2 rounded-lg border-none bg-transparent cursor-pointer text-[0.875rem] text-red-500 font-medium hover:bg-red-50 transition-colors"
                   >
                     <svg
                       width="14"
@@ -745,16 +505,12 @@ export default function Dashboard() {
         </header>
 
         {/* Page content */}
-        <main
-          style={{ flex: 1, overflowY: "auto", padding: "24px" }}
-          className="animate-fade-up"
-        >
+        <main className="flex-1 overflow-y-auto p-6 animate-fade-up">
           {renderPage()}
         </main>
       </div>
 
       <ToastContainer />
-      <style>{`@keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }`}</style>
     </div>
   );
 }

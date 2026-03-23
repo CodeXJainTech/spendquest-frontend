@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { toast } from "./Toast";
 
+const inputCls =
+  "w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm placeholder:text-gray-400 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/10 transition";
+const labelCls =
+  "block text-[0.75rem] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider";
+
 export default function Budgets({
   authAxios,
   budgets,
@@ -48,27 +53,41 @@ export default function Budgets({
   const totalLimit = budgets.reduce((s, b) => s + b.limit, 0);
   const totalSpent = budgets.reduce((s, b) => s + (b.spent || 0), 0);
 
+  const summaryCards = [
+    {
+      label: "Total Budget",
+      value: `₹${totalLimit.toLocaleString("en-IN")}`,
+      color: "text-indigo-600",
+    },
+    {
+      label: "Total Spent",
+      value: `₹${totalSpent.toLocaleString("en-IN")}`,
+      color: totalSpent > totalLimit ? "text-red-500" : "text-[#0F1117]",
+    },
+    {
+      label: "Remaining",
+      value: `₹${Math.max(0, totalLimit - totalSpent).toLocaleString("en-IN")}`,
+      color: "text-emerald-600",
+    },
+    { label: "Categories", value: budgets.length, color: "text-gray-700" },
+  ];
+
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", gap: 20 }}
-      className="animate-fade-up"
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 12,
-        }}
-      >
+    <div className="flex flex-col gap-5 animate-fade-up">
+      {/* Header */}
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <div className="page-title">Budgets</div>
-          <div style={{ fontSize: "0.8rem", color: "var(--t4)", marginTop: 3 }}>
+          <div className="font-bold text-2xl text-[#0F1117] tracking-tight">
+            Budgets
+          </div>
+          <div className="text-[0.8rem] text-gray-400 mt-0.5">
             Category spending limits • match transaction category names
           </div>
         </div>
-        <button onClick={() => setShowAdd(true)} className="btn btn-primary">
+        <button
+          onClick={() => setShowAdd(true)}
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[0.875rem] font-semibold shadow-[0_4px_14px_rgba(79,70,229,0.35)] hover:-translate-y-px transition border-none cursor-pointer"
+        >
           <svg
             width="14"
             height="14"
@@ -84,57 +103,24 @@ export default function Budgets({
         </button>
       </div>
 
+      {/* Summary row */}
       {budgets.length > 0 && (
         <div
+          className="grid gap-3"
           style={{
-            display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: 12,
           }}
         >
-          {[
-            {
-              label: "Total Budget",
-              value: `₹${totalLimit.toLocaleString("en-IN")}`,
-              color: "var(--brand)",
-            },
-            {
-              label: "Total Spent",
-              value: `₹${totalSpent.toLocaleString("en-IN")}`,
-              color: totalSpent > totalLimit ? "var(--red)" : "var(--t1)",
-            },
-            {
-              label: "Remaining",
-              value: `₹${Math.max(0, totalLimit - totalSpent).toLocaleString("en-IN")}`,
-              color: "var(--green)",
-            },
-            { label: "Categories", value: budgets.length, color: "var(--t2)" },
-          ].map((s) => (
+          {summaryCards.map((s) => (
             <div
               key={s.label}
-              className="card"
-              style={{ padding: "16px 20px" }}
+              className="bg-white rounded-2xl border border-gray-200 shadow-sm px-5 py-4"
             >
-              <div
-                style={{
-                  fontSize: "0.72rem",
-                  fontWeight: 700,
-                  color: "var(--t4)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                  marginBottom: 6,
-                }}
-              >
+              <div className="text-[0.72rem] font-bold text-gray-400 uppercase tracking-widest mb-1.5">
                 {s.label}
               </div>
               <div
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 800,
-                  fontSize: "1.4rem",
-                  color: s.color,
-                  letterSpacing: "-0.02em",
-                }}
+                className={`font-extrabold text-[1.4rem] tracking-tight ${s.color}`}
               >
                 {s.value}
               </div>
@@ -143,17 +129,15 @@ export default function Budgets({
         </div>
       )}
 
+      {/* Empty state */}
       {budgets.length === 0 ? (
-        <div
-          className="card"
-          style={{ textAlign: "center", padding: "64px 24px" }}
-        >
-          <div className="empty-icon" style={{ margin: "0 auto 16px" }}>
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm text-center px-6 py-16">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto mb-4">
             <svg
               width="24"
               height="24"
               fill="none"
-              stroke="var(--brand)"
+              stroke="#4F46E5"
               strokeWidth="2"
               viewBox="0 0 24 24"
             >
@@ -161,83 +145,56 @@ export default function Budgets({
               <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
             </svg>
           </div>
-          <div className="section-title" style={{ marginBottom: 6 }}>
+          <div className="font-bold text-[1rem] text-[#0F1117] mb-1.5">
             No budgets yet
           </div>
-          <div style={{ color: "var(--t4)", fontSize: "0.875rem" }}>
+          <div className="text-gray-400 text-[0.875rem]">
             Create a budget to track spending by category
           </div>
         </div>
       ) : (
         <div
+          className="grid gap-4"
           style={{
-            display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: 16,
           }}
         >
           {budgets.map((b) => {
             const pct = Math.min(100, ((b.spent || 0) / b.limit) * 100);
             const over = (b.spent || 0) > b.limit;
             const warn = !over && pct > 80;
-            const barColor = over
-              ? "var(--red)"
-              : warn
-                ? "var(--amber)"
-                : "var(--green)";
+            const barColor = over ? "#EF4444" : warn ? "#F59E0B" : "#10B981";
             const isDeleting = deletingId === b._id;
 
             return (
               <div
                 key={b._id}
-                className="card card-p"
-                style={{
-                  opacity: isDeleting ? 0.5 : 1,
-                  transition: "opacity 0.2s",
-                }}
+                className={`bg-white rounded-2xl border border-gray-200 shadow-sm p-6 transition-opacity ${isDeleting ? "opacity-50" : "opacity-100"}`}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    justifyContent: "space-between",
-                    marginBottom: 16,
-                  }}
-                >
+                <div className="flex items-start justify-between mb-4">
                   <div>
-                    <div
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontWeight: 700,
-                        fontSize: "1rem",
-                        color: "var(--t1)",
-                      }}
-                    >
+                    <div className="font-bold text-[1rem] text-[#0F1117]">
                       {b.category}
                     </div>
-                    <div
-                      style={{
-                        fontSize: "0.75rem",
-                        color: "var(--t4)",
-                        marginTop: 3,
-                      }}
-                    >
+                    <div className="text-[0.75rem] text-gray-400 mt-0.5">
                       Limit: ₹{Number(b.limit).toLocaleString("en-IN")}
                     </div>
                   </div>
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 6 }}
-                  >
+                  <div className="flex items-center gap-1.5">
                     {over && (
-                      <span className="badge badge-red">Over budget</span>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.72rem] font-semibold bg-red-50 text-red-700">
+                        Over budget
+                      </span>
                     )}
                     {warn && !over && (
-                      <span className="badge badge-amber">80%+</span>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.72rem] font-semibold bg-amber-50 text-amber-700">
+                        80%+
+                      </span>
                     )}
                     <button
                       disabled={isDeleting}
                       onClick={() => del(b._id, b.category)}
-                      className="btn btn-icon btn-danger"
+                      className="w-[34px] h-[34px] rounded-lg flex items-center justify-center bg-red-50 hover:bg-red-100 text-red-500 border-[1.5px] border-red-200 disabled:opacity-55 cursor-pointer transition"
                     >
                       {isDeleting ? (
                         <svg
@@ -247,7 +204,7 @@ export default function Budgets({
                           fill="none"
                           stroke="currentColor"
                           strokeWidth="2"
-                          className="spin"
+                          className="animate-spin"
                         >
                           <circle
                             cx="12"
@@ -273,33 +230,22 @@ export default function Budgets({
                   </div>
                 </div>
 
-                <div className="progress-track" style={{ marginBottom: 10 }}>
+                <div className="h-2 rounded-full bg-gray-100 border border-gray-200 overflow-hidden mb-2.5">
                   <div
-                    className="progress-fill"
+                    className="h-full rounded-full transition-[width_0.6s_cubic-bezier(0.4,0,0.2,1)]"
                     style={{ width: `${pct}%`, background: barColor }}
                   />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span style={{ fontSize: "0.8rem", color: "var(--t2)" }}>
-                    <strong
-                      style={{
-                        color: "var(--t1)",
-                        fontFamily: "var(--font-display)",
-                      }}
-                    >
+                <div className="flex items-center justify-between">
+                  <span className="text-[0.8rem] text-gray-600">
+                    <strong className="font-[Bricolage_Grotesque] text-[#0F1117]">
                       ₹{(b.spent || 0).toLocaleString("en-IN")}
                     </strong>{" "}
                     spent
                   </span>
                   <span
-                    className={`badge ${over ? "badge-red" : warn ? "badge-amber" : "badge-green"}`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.72rem] font-semibold ${over ? "bg-red-50 text-red-700" : warn ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"}`}
                   >
                     {over
                       ? `₹${((b.spent || 0) - b.limit).toLocaleString("en-IN")} over`
@@ -312,39 +258,20 @@ export default function Budgets({
         </div>
       )}
 
+      {/* Modal */}
       {showAdd && (
         <div
-          className="modal-backdrop"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-sm"
           onClick={(e) => e.target === e.currentTarget && setShowAdd(false)}
         >
-          <div className="modal">
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 22,
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 700,
-                  fontSize: "1.1rem",
-                }}
-              >
+          <div className="bg-white rounded-3xl shadow-[0_20px_25px_rgba(0,0,0,0.09)] w-full max-w-[440px] p-7 modal-animate">
+            <div className="flex items-center justify-between mb-5">
+              <div className="font-bold text-[1.1rem] text-[#0F1117]">
                 New Budget
               </div>
               <button
                 onClick={() => setShowAdd(false)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "var(--t4)",
-                  padding: 4,
-                  display: "flex",
-                }}
+                className="bg-transparent border-none cursor-pointer text-gray-400 hover:text-gray-600 p-1 flex transition"
               >
                 <svg
                   width="18"
@@ -359,24 +286,21 @@ export default function Budgets({
                 </svg>
               </button>
             </div>
-            <form
-              onSubmit={add}
-              style={{ display: "flex", flexDirection: "column", gap: 14 }}
-            >
+            <form onSubmit={add} className="flex flex-col gap-3.5">
               <div>
-                <label className="label">Category Name</label>
+                <label className={labelCls}>Category Name</label>
                 <input
                   value={form.category}
                   onChange={(e) =>
                     setForm((f) => ({ ...f, category: e.target.value }))
                   }
-                  className="input"
+                  className={inputCls}
                   placeholder="e.g. Food, Travel, Entertainment"
                   required
                 />
               </div>
               <div>
-                <label className="label">Monthly Limit (₹)</label>
+                <label className={labelCls}>Monthly Limit (₹)</label>
                 <input
                   type="number"
                   min="1"
@@ -384,25 +308,23 @@ export default function Budgets({
                   onChange={(e) =>
                     setForm((f) => ({ ...f, limit: e.target.value }))
                   }
-                  className="input"
+                  className={inputCls}
                   placeholder="0"
                   required
                 />
               </div>
-              <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+              <div className="flex gap-2.5 mt-1">
                 <button
                   type="button"
                   onClick={() => setShowAdd(false)}
-                  className="btn btn-ghost"
-                  style={{ flex: 1 }}
+                  className="flex-1 px-4 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-[#F4F6FB] hover:bg-white text-gray-700 text-[0.875rem] font-semibold cursor-pointer transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn btn-primary"
-                  style={{ flex: 1 }}
                   disabled={adding}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[0.875rem] font-semibold shadow-[0_4px_14px_rgba(79,70,229,0.35)] disabled:opacity-55 disabled:cursor-not-allowed border-none cursor-pointer transition"
                 >
                   {adding ? "Creating…" : "Create Budget"}
                 </button>

@@ -8,13 +8,14 @@ export default function Signin() {
   const [error, setError] = useState("");
   const [showPw, setShowPw] = useState(false);
 
-  const doLogin = async (credentials) => {
+  const submit = async (e) => {
+    e.preventDefault();
     setLoad(true);
     setError("");
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/user/signin`,
-        credentials,
+        form,
       );
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.userId);
@@ -27,163 +28,68 @@ export default function Signin() {
     }
   };
 
-  const submit = (e) => {
-    e.preventDefault();
-    doLogin(form);
-  };
-  const loginDemo = () =>
-    doLogin({ userName: "demo@spendquest.com", password: "123456" });
-
   return (
-    <div
-      style={{ minHeight: "100vh", display: "flex", background: "var(--bg)" }}
-    >
+    <div className="min-h-screen flex bg-[#F4F6FB]">
       {/* Left panel */}
       <div
-        className="hidden md:flex"
+        className="hidden md:flex w-[42%] flex-col justify-between p-12 relative overflow-hidden"
         style={{
-          width: "42%",
           background:
             "linear-gradient(160deg, #1E1B4B 0%, #312E81 55%, #4338CA 100%)",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "48px",
-          position: "relative",
-          overflow: "hidden",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: -80,
-            right: -80,
-            width: 320,
-            height: 320,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.04)",
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: -60,
-            left: -60,
-            width: 240,
-            height: 240,
-            borderRadius: "50%",
-            background: "rgba(129,140,248,0.12)",
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "relative",
-            fontFamily: "var(--font-display)",
-            fontWeight: 800,
-            fontSize: "1.4rem",
-            color: "#fff",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Spend<span style={{ color: "#818CF8" }}>Quest</span>
+        <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white/[0.04] pointer-events-none" />
+        <div className="absolute -bottom-14 -left-14 w-60 h-60 rounded-full bg-indigo-400/[0.12] pointer-events-none" />
+
+        <div className="relative font-extrabold text-[1.4rem] text-white tracking-tight">
+          Spend<span className="text-indigo-400">Quest</span>
         </div>
-        <div style={{ position: "relative" }}>
-          <div
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(1.8rem,3.5vw,2.6rem)",
-              fontWeight: 800,
-              color: "#fff",
-              lineHeight: 1.2,
-              letterSpacing: "-0.03em",
-              marginBottom: 16,
-            }}
-          >
+
+        <div className="relative">
+          <h2 className="text-[clamp(1.8rem,3.5vw,2.6rem)] font-extrabold text-white leading-tight tracking-tight mb-4">
             Every rupee tracked.
             <br />
             Every goal reached.
-          </div>
-          <p
-            style={{
-              color: "rgba(199,210,254,0.65)",
-              fontSize: "0.95rem",
-              lineHeight: 1.7,
-            }}
-          >
+          </h2>
+          <p className="text-indigo-200/65 text-[0.95rem] leading-relaxed">
             Your personal finance companion — budgets, goals, AI receipt
             scanning, and instant transfers.
           </p>
         </div>
-        <div style={{ display: "flex", gap: 28, position: "relative" }}>
+
+        <div className="flex gap-7 relative">
           {["AI Scanning", "Budgets", "Goals"].map((f) => (
-            <div
+            <span
               key={f}
-              style={{
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "rgba(199,210,254,0.4)",
-              }}
+              className="text-[0.7rem] font-bold tracking-widest uppercase text-indigo-200/40"
             >
               {f}
-            </div>
+            </span>
           ))}
         </div>
       </div>
 
       {/* Right panel */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "40px 24px",
-        }}
-      >
-        <div style={{ width: "100%", maxWidth: 400 }}>
-          {/* Mobile logo */}
-          <div
-            className="md:hidden"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 800,
-              fontSize: "1.6rem",
-              color: "var(--t1)",
-              marginBottom: 32,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Spend<span style={{ color: "var(--brand)" }}>Quest</span>
+      <div className="flex-1 flex items-center justify-center px-6 py-10">
+        <div className="w-full max-w-[400px]">
+          <div className="md:hidden font-extrabold text-[1.6rem] text-[#0F1117] mb-8 tracking-tight">
+            Spend<span className="text-indigo-600">Quest</span>
           </div>
 
-          <div style={{ marginBottom: 32 }}>
-            <div
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 800,
-                fontSize: "1.75rem",
-                color: "var(--t1)",
-                letterSpacing: "-0.02em",
-              }}
-            >
+          <div className="mb-8">
+            <h1 className="font-extrabold text-[1.75rem] text-[#0F1117] tracking-tight">
               Welcome back
-            </div>
-            <div
-              style={{ color: "var(--t4)", marginTop: 6, fontSize: "0.9rem" }}
-            >
+            </h1>
+            <p className="text-gray-400 mt-1.5 text-[0.9rem]">
               Sign in to your account to continue
-            </div>
+            </p>
           </div>
 
-          <form
-            onSubmit={submit}
-            style={{ display: "flex", flexDirection: "column", gap: 16 }}
-          >
+          <form onSubmit={submit} className="flex flex-col gap-4">
             <div>
-              <label className="label">Email Address</label>
+              <label className="block text-[0.75rem] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
+                Email Address
+              </label>
               <input
                 name="userName"
                 type="email"
@@ -192,14 +98,16 @@ export default function Signin() {
                   setForm((p) => ({ ...p, userName: e.target.value }));
                   setError("");
                 }}
-                className="input"
                 placeholder="you@example.com"
                 required
+                className="w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm placeholder:text-gray-400 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/10 transition"
               />
             </div>
             <div>
-              <label className="label">Password</label>
-              <div style={{ position: "relative" }}>
+              <label className="block text-[0.75rem] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
+                Password
+              </label>
+              <div className="relative">
                 <input
                   name="password"
                   type={showPw ? "text" : "password"}
@@ -208,26 +116,14 @@ export default function Signin() {
                     setForm((p) => ({ ...p, password: e.target.value }));
                     setError("");
                   }}
-                  className="input"
-                  style={{ paddingRight: 42 }}
                   placeholder="Enter your password"
                   required
+                  className="w-full px-3.5 py-2.5 pr-11 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm placeholder:text-gray-400 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/10 transition"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw((v) => !v)}
-                  style={{
-                    position: "absolute",
-                    right: 12,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "var(--t4)",
-                    display: "flex",
-                    padding: 2,
-                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-600 transition flex"
                 >
                   {showPw ? (
                     <svg
@@ -259,31 +155,15 @@ export default function Signin() {
             </div>
 
             {error && (
-              <div
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: "var(--r-md)",
-                  background: "var(--red-bg)",
-                  border: "1px solid #FECACA",
-                  color: "var(--red-text)",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                }}
-              >
+              <div className="px-3.5 py-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-[0.85rem] font-medium">
                 {error}
               </div>
             )}
 
             <button
               type="submit"
-              className="btn btn-primary"
-              style={{
-                width: "100%",
-                padding: "12px",
-                fontSize: "0.95rem",
-                marginTop: 4,
-              }}
               disabled={loading}
+              className="mt-1 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-[0.95rem] font-semibold shadow-[0_4px_14px_rgba(79,70,229,0.35)] hover:-translate-y-px disabled:opacity-55 disabled:cursor-not-allowed disabled:transform-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition"
             >
               {loading ? (
                 <>
@@ -294,7 +174,7 @@ export default function Signin() {
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="spin"
+                    className="animate-spin"
                   >
                     <circle cx="12" cy="12" r="9" strokeDasharray="28 56" />
                   </svg>{" "}
@@ -304,71 +184,17 @@ export default function Signin() {
                 "Sign In"
               )}
             </button>
-
-            {/* Divider */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div
-                style={{ flex: 1, height: 1, background: "var(--border)" }}
-              />
-              <span
-                style={{
-                  fontSize: "0.72rem",
-                  color: "var(--t4)",
-                  fontWeight: 500,
-                  letterSpacing: "0.04em",
-                }}
-              >
-                OR
-              </span>
-              <div
-                style={{ flex: 1, height: 1, background: "var(--border)" }}
-              />
-            </div>
-
-            {/* Demo button */}
-            <button
-              type="button"
-              onClick={loginDemo}
-              disabled={loading}
-              className="btn btn-ghost"
-              style={{ width: "100%", padding: "12px", fontSize: "0.875rem" }}
-            >
-              <svg
-                width="15"
-                height="15"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                <polyline points="10 17 15 12 10 7" />
-                <line x1="15" y1="12" x2="3" y2="12" />
-              </svg>
-              Try Demo Account
-            </button>
           </form>
 
-          <div
-            style={{
-              marginTop: 24,
-              textAlign: "center",
-              fontSize: "0.875rem",
-              color: "var(--t4)",
-            }}
-          >
+          <p className="mt-6 text-center text-[0.875rem] text-gray-400">
             Don't have an account?{" "}
             <Link
               to="/signup"
-              style={{
-                color: "var(--brand)",
-                fontWeight: 600,
-                textDecoration: "none",
-              }}
+              className="text-indigo-600 font-semibold hover:underline"
             >
               Create one →
             </Link>
-          </div>
+          </p>
         </div>
       </div>
     </div>

@@ -4,6 +4,11 @@ import { toast } from "./Toast";
 
 const DATE_FILTERS = ["All time", "This month", "Last 3 months", "This year"];
 
+const inputCls =
+  "w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm placeholder:text-gray-400 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/10 transition";
+const labelCls =
+  "block text-[0.75rem] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider";
+
 export default function Transactions({
   transactions = [],
   refreshDashboard,
@@ -152,7 +157,6 @@ export default function Transactions({
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const pageTxns = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
   const totalCredit = filtered
     .filter((t) => t.isReceived)
     .reduce((s, t) => s + Number(t.amount), 0);
@@ -161,30 +165,21 @@ export default function Transactions({
     .reduce((s, t) => s + Number(t.amount), 0);
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", gap: 20 }}
-      className="animate-fade-up"
-    >
+    <div className="flex flex-col gap-5 animate-fade-up">
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: 12,
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <div className="page-title">Transactions</div>
-          <div style={{ fontSize: "0.8rem", color: "var(--t4)", marginTop: 3 }}>
+          <div className="font-bold text-2xl text-[#0F1117] tracking-tight">
+            Transactions
+          </div>
+          <div className="text-[0.8rem] text-gray-400 mt-0.5">
             {transactions.length} total transactions
           </div>
         </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setShowModal(true)}
-            className="btn btn-primary"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[0.875rem] font-semibold shadow-[0_4px_14px_rgba(79,70,229,0.35)] hover:-translate-y-px border-none cursor-pointer transition"
           >
             <svg
               width="14"
@@ -199,7 +194,10 @@ export default function Transactions({
             </svg>
             Add Transaction
           </button>
-          <button onClick={exportCSV} className="btn btn-ghost">
+          <button
+            onClick={exportCSV}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-[#F4F6FB] hover:bg-white text-gray-700 text-[0.875rem] font-semibold cursor-pointer transition"
+          >
             <svg
               width="14"
               height="14"
@@ -219,70 +217,20 @@ export default function Transactions({
 
       {/* Summary chips */}
       {filtered.length > 0 && (
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "6px 14px",
-              borderRadius: "99px",
-              background: "var(--green-bg)",
-              border: "1px solid #A7F3D0",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                color: "var(--green-text)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
+        <div className="flex gap-2.5 flex-wrap">
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200">
+            <span className="text-[0.7rem] font-bold text-emerald-800 uppercase tracking-wider">
               Total Credit
             </span>
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 700,
-                color: "var(--green)",
-                fontSize: "0.875rem",
-              }}
-            >
+            <span className="font-bold text-emerald-600 text-[0.875rem]">
               +₹{totalCredit.toLocaleString("en-IN")}
             </span>
           </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "6px 14px",
-              borderRadius: "99px",
-              background: "var(--red-bg)",
-              border: "1px solid #FECACA",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                color: "var(--red-text)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200">
+            <span className="text-[0.7rem] font-bold text-red-800 uppercase tracking-wider">
               Total Debit
             </span>
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 700,
-                color: "var(--red)",
-                fontSize: "0.875rem",
-              }}
-            >
+            <span className="font-bold text-red-500 text-[0.875rem]">
               −₹{totalDebit.toLocaleString("en-IN")}
             </span>
           </div>
@@ -290,28 +238,16 @@ export default function Transactions({
       )}
 
       {/* Filters */}
-      <div
-        style={{
-          display: "flex",
-          gap: 10,
-          flexWrap: "wrap",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ position: "relative", flex: "1 1 180px" }}>
+      <div className="flex gap-2.5 flex-wrap items-center">
+        <div className="relative flex-1 min-w-[180px]">
           <svg
             width="14"
             height="14"
             fill="none"
-            stroke="var(--t4)"
+            stroke="#9CA3AF"
             strokeWidth="2"
             viewBox="0 0 24 24"
-            style={{
-              position: "absolute",
-              left: 12,
-              top: "50%",
-              transform: "translateY(-50%)",
-            }}
+            className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
           >
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -323,8 +259,7 @@ export default function Transactions({
               setPage(1);
             }}
             placeholder="Search transactions…"
-            className="input"
-            style={{ paddingLeft: 36 }}
+            className={`${inputCls} pl-9`}
           />
         </div>
         <select
@@ -333,8 +268,7 @@ export default function Transactions({
             setCatFilter(e.target.value);
             setPage(1);
           }}
-          className="input"
-          style={{ width: "auto", flex: "0 0 auto" }}
+          className="px-3.5 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm focus:outline-none focus:border-indigo-600 transition"
         >
           <option value="">All categories</option>
           {categories.map((c) => (
@@ -343,16 +277,7 @@ export default function Transactions({
             </option>
           ))}
         </select>
-        <div
-          style={{
-            display: "flex",
-            gap: 4,
-            background: "var(--bg-card)",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--r-md)",
-            padding: 3,
-          }}
-        >
+        <div className="flex gap-1 bg-white border border-gray-200 rounded-xl p-0.5">
           {DATE_FILTERS.map((f) => (
             <button
               key={f}
@@ -360,18 +285,8 @@ export default function Transactions({
                 setDateFilter(f);
                 setPage(1);
               }}
-              style={{
-                padding: "5px 12px",
-                borderRadius: "var(--r-sm)",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "0.78rem",
-                fontWeight: 500,
-                fontFamily: "var(--font-body)",
-                transition: "all 0.15s",
-                background: dateFilter === f ? "var(--brand)" : "transparent",
-                color: dateFilter === f ? "#fff" : "var(--t3)",
-              }}
+              className={`px-3 py-1.5 rounded-lg border-none cursor-pointer text-[0.78rem] font-medium transition-all
+                ${dateFilter === f ? "bg-indigo-600 text-white shadow-sm" : "bg-transparent text-gray-500 hover:text-gray-700"}`}
             >
               {f}
             </button>
@@ -379,18 +294,15 @@ export default function Transactions({
         </div>
       </div>
 
-      {/* Table */}
+      {/* Table or empty state */}
       {transactions.length === 0 ? (
-        <div
-          className="card"
-          style={{ textAlign: "center", padding: "64px 24px" }}
-        >
-          <div className="empty-icon" style={{ margin: "0 auto 16px" }}>
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm text-center px-6 py-16">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto mb-4">
             <svg
               width="24"
               height="24"
               fill="none"
-              stroke="var(--brand)"
+              stroke="#4F46E5"
               strokeWidth="2"
               viewBox="0 0 24 24"
             >
@@ -399,71 +311,58 @@ export default function Transactions({
               <line x1="9" y1="11" x2="15" y2="11" />
             </svg>
           </div>
-          <div className="section-title" style={{ marginBottom: 6 }}>
+          <div className="font-bold text-[1rem] text-[#0F1117] mb-1.5">
             No transactions yet
           </div>
-          <div
-            style={{
-              color: "var(--t4)",
-              fontSize: "0.875rem",
-              marginBottom: 20,
-            }}
-          >
+          <div className="text-gray-400 text-[0.875rem] mb-5">
             Add your first transaction to get started
           </div>
           <button
             onClick={() => setShowModal(true)}
-            className="btn btn-primary"
-            style={{ display: "inline-flex" }}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[0.875rem] font-semibold border-none cursor-pointer transition"
           >
             + Add Transaction
           </button>
         </div>
       ) : (
-        <div className="card" style={{ overflow: "hidden" }}>
-          <div style={{ overflowX: "auto" }}>
-            <table className="data-table">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
               <thead>
-                <tr>
-                  <th>Transaction</th>
-                  <th>Date & Time</th>
-                  <th>Category</th>
-                  <th style={{ textAlign: "right" }}>Amount</th>
-                  <th>Status</th>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="px-4 py-2.5 text-left text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Transaction
+                  </th>
+                  <th className="px-4 py-2.5 text-left text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Date & Time
+                  </th>
+                  <th className="px-4 py-2.5 text-left text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Category
+                  </th>
+                  <th className="px-4 py-2.5 text-right text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Amount
+                  </th>
+                  <th className="px-4 py-2.5 text-left text-[0.7rem] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {pageTxns.map((txn) => (
-                  <tr key={txn._id || txn.id}>
-                    <td>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 12,
-                        }}
-                      >
+                  <tr
+                    key={txn._id || txn.id}
+                    className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-4 py-3.5">
+                      <div className="flex items-center gap-3">
                         <div
-                          style={{
-                            width: 36,
-                            height: 36,
-                            borderRadius: "10px",
-                            background: txn.isReceived
-                              ? "var(--green-bg)"
-                              : "var(--red-bg)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
-                          }}
+                          className={`w-9 h-9 rounded-[10px] flex items-center justify-center shrink-0 ${txn.isReceived ? "bg-emerald-50" : "bg-red-50"}`}
                         >
                           <svg
                             width="15"
                             height="15"
                             fill="none"
-                            stroke={
-                              txn.isReceived ? "var(--green)" : "var(--red)"
-                            }
+                            stroke={txn.isReceived ? "#10B981" : "#EF4444"}
                             strokeWidth="2.5"
                             viewBox="0 0 24 24"
                           >
@@ -480,51 +379,46 @@ export default function Transactions({
                             )}
                           </svg>
                         </div>
-                        <span style={{ fontWeight: 500, color: "var(--t1)" }}>
+                        <span className="font-medium text-[#0F1117] text-[0.875rem]">
                           {txn.description}
                         </span>
                       </div>
                     </td>
-                    <td>
-                      <div style={{ color: "var(--t2)" }}>
+                    <td className="px-4 py-3.5">
+                      <div className="text-gray-600 text-[0.875rem]">
                         {new Date(txn.date).toLocaleDateString("en-IN", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",
                         })}
                       </div>
-                      <div style={{ color: "var(--t4)", fontSize: "0.72rem" }}>
+                      <div className="text-gray-400 text-[0.72rem]">
                         {new Date(txn.date).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
                         })}
                       </div>
                     </td>
-                    <td>
+                    <td className="px-4 py-3.5">
                       {txn.category ? (
-                        <span className="badge badge-brand">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.72rem] font-semibold bg-indigo-50 text-indigo-700">
                           {txn.category}
                         </span>
                       ) : (
-                        <span style={{ color: "var(--t4)" }}>—</span>
+                        <span className="text-gray-300">—</span>
                       )}
                     </td>
-                    <td style={{ textAlign: "right" }}>
+                    <td className="px-4 py-3.5 text-right">
                       <span
-                        style={{
-                          fontFamily: "var(--font-display)",
-                          fontWeight: 700,
-                          fontSize: "0.95rem",
-                          color: txn.isReceived ? "var(--green)" : "var(--red)",
-                        }}
+                        className={`font-bold text-[0.95rem] ${txn.isReceived ? "text-emerald-600" : "text-red-500"}`}
                       >
                         {txn.isReceived ? "+" : "−"}₹
                         {Number(txn.amount).toLocaleString("en-IN")}
                       </span>
                     </td>
-                    <td>
+                    <td className="px-4 py-3.5">
                       <span
-                        className={`badge ${txn.isReceived ? "badge-green" : "badge-red"}`}
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.72rem] font-semibold ${txn.isReceived ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}`}
                       >
                         {txn.isReceived ? "Credit" : "Debit"}
                       </span>
@@ -535,42 +429,25 @@ export default function Transactions({
             </table>
           </div>
           {/* Pagination */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "14px 20px",
-              borderTop: "1px solid var(--border)",
-              background: "var(--bg)",
-            }}
-          >
-            <span style={{ fontSize: "0.8rem", color: "var(--t4)" }}>
+          <div className="flex items-center justify-between px-5 py-3.5 border-t border-gray-100 bg-gray-50">
+            <span className="text-[0.8rem] text-gray-400">
               {filtered.length} result{filtered.length !== 1 ? "s" : ""}
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div className="flex items-center gap-1.5">
               <button
-                className="btn btn-ghost"
-                style={{ padding: "5px 14px", fontSize: "0.8rem" }}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
+                className="px-3.5 py-1.5 rounded-lg border-[1.5px] border-gray-200 bg-[#F4F6FB] hover:bg-white text-gray-700 text-[0.8rem] font-medium cursor-pointer disabled:opacity-40 transition"
               >
                 ← Prev
               </button>
-              <span
-                style={{
-                  fontSize: "0.8rem",
-                  color: "var(--t3)",
-                  padding: "0 4px",
-                }}
-              >
+              <span className="text-[0.8rem] text-gray-500 px-1">
                 {page} / {pageCount}
               </span>
               <button
-                className="btn btn-ghost"
-                style={{ padding: "5px 14px", fontSize: "0.8rem" }}
                 onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
                 disabled={page === pageCount}
+                className="px-3.5 py-1.5 rounded-lg border-[1.5px] border-gray-200 bg-[#F4F6FB] hover:bg-white text-gray-700 text-[0.8rem] font-medium cursor-pointer disabled:opacity-40 transition"
               >
                 Next →
               </button>
@@ -579,42 +456,20 @@ export default function Transactions({
         </div>
       )}
 
-      {/* Modal */}
+      {/* Add Transaction Modal */}
       {showModal && (
         <div
-          className="modal-backdrop"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-sm"
           onClick={(e) => e.target === e.currentTarget && setShowModal(false)}
         >
-          <div className="modal">
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 22,
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 700,
-                  fontSize: "1.1rem",
-                  color: "var(--t1)",
-                }}
-              >
+          <div className="bg-white rounded-3xl shadow-[0_20px_25px_rgba(0,0,0,0.09)] w-full max-w-[440px] p-7 modal-animate">
+            <div className="flex items-center justify-between mb-5">
+              <div className="font-bold text-[1.1rem] text-[#0F1117]">
                 Add Transaction
               </div>
               <button
                 onClick={() => setShowModal(false)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "var(--t4)",
-                  padding: 4,
-                  borderRadius: 6,
-                  display: "flex",
-                }}
+                className="bg-transparent border-none cursor-pointer text-gray-400 hover:text-gray-600 p-1 flex rounded-md transition"
               >
                 <svg
                   width="18"
@@ -629,47 +484,21 @@ export default function Transactions({
                 </svg>
               </button>
             </div>
-            <form
-              onSubmit={submit}
-              style={{ display: "flex", flexDirection: "column", gap: 14 }}
-            >
+            <form onSubmit={submit} className="flex flex-col gap-3.5">
+              {/* Receipt scan */}
               <input
                 id="receipt-input"
                 type="file"
                 accept="image/*"
                 onChange={handleScan}
                 className="hidden"
-                style={{ display: "none" }}
               />
               <button
                 type="button"
                 onClick={() => document.getElementById("receipt-input").click()}
                 disabled={isScanning}
-                style={{
-                  padding: "10px 16px",
-                  borderRadius: "var(--r-md)",
-                  border: "2px dashed var(--border)",
-                  background: isScanning ? "var(--bg)" : "transparent",
-                  cursor: isScanning ? "not-allowed" : "pointer",
-                  fontSize: "0.875rem",
-                  color: "var(--t3)",
-                  fontFamily: "var(--font-body)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                  transition: "all 0.18s",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isScanning) {
-                    e.currentTarget.style.borderColor = "var(--brand)";
-                    e.currentTarget.style.color = "var(--brand)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--border)";
-                  e.currentTarget.style.color = "var(--t3)";
-                }}
+                className={`px-4 py-2.5 rounded-xl border-2 border-dashed text-[0.875rem] font-medium flex items-center justify-center gap-2 transition cursor-pointer
+                  ${isScanning ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed" : "border-gray-200 bg-transparent text-gray-500 hover:border-indigo-600 hover:text-indigo-600"}`}
               >
                 {isScanning ? (
                   <>
@@ -680,7 +509,7 @@ export default function Transactions({
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
-                      className="spin"
+                      className="animate-spin"
                     >
                       <circle cx="12" cy="12" r="9" strokeDasharray="28 56" />
                     </svg>{" "}
@@ -704,22 +533,10 @@ export default function Transactions({
                   </>
                 )}
               </button>
+
               {scanMsg && (
                 <div
-                  style={{
-                    padding: "8px 12px",
-                    borderRadius: "var(--r-sm)",
-                    fontSize: "0.8rem",
-                    fontWeight: 500,
-                    background:
-                      scanMsg === "success"
-                        ? "var(--green-bg)"
-                        : "var(--amber-bg)",
-                    color:
-                      scanMsg === "success"
-                        ? "var(--green-text)"
-                        : "var(--amber-text)",
-                  }}
+                  className={`px-3 py-2 rounded-lg text-[0.8rem] font-medium ${scanMsg === "success" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}
                 >
                   {scanMsg === "success"
                     ? "✓ Details extracted from receipt"
@@ -730,25 +547,13 @@ export default function Transactions({
                 <img
                   src={receiptPreview}
                   alt="receipt"
-                  style={{
-                    height: 60,
-                    width: 60,
-                    objectFit: "cover",
-                    borderRadius: "var(--r-sm)",
-                    border: "1px solid var(--border)",
-                  }}
+                  className="h-[60px] w-[60px] object-cover rounded-lg border border-gray-200"
                 />
               )}
 
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 12,
-                }}
-              >
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="label">Amount (₹)</label>
+                  <label className={labelCls}>Amount (₹)</label>
                   <input
                     name="amount"
                     type="number"
@@ -756,103 +561,88 @@ export default function Transactions({
                     step="0.01"
                     value={form.amount}
                     onChange={handleChange}
-                    className="input"
+                    className={inputCls}
                     placeholder="0.00"
                     required
                   />
                 </div>
                 <div>
-                  <label className="label">Category</label>
+                  <label className={labelCls}>Category</label>
                   <input
                     name="category"
                     value={form.category}
                     onChange={handleChange}
-                    className="input"
+                    className={inputCls}
                     placeholder="e.g. Groceries"
                   />
                 </div>
               </div>
               <div>
-                <label className="label">Date</label>
+                <label className={labelCls}>Date</label>
                 <input
                   name="date"
                   type="date"
                   value={form.date}
                   onChange={handleChange}
-                  className="input"
+                  className={inputCls}
                 />
               </div>
               <div>
-                <label className="label">Description</label>
+                <label className={labelCls}>Description</label>
                 <input
                   name="description"
                   value={form.description}
                   onChange={handleChange}
-                  className="input"
+                  className={inputCls}
                   placeholder="What was this for?"
                   required
                 />
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  padding: "12px 14px",
-                  background: "var(--bg)",
-                  borderRadius: "var(--r-md)",
-                  border: "1px solid var(--border)",
-                }}
-              >
+              {/* Toggle */}
+              <div className="flex items-center gap-3 px-3.5 py-3 bg-gray-50 rounded-xl border border-gray-200">
                 <div
-                  className="toggle-track"
+                  className="relative w-[42px] h-[24px] rounded-full cursor-pointer shrink-0 transition-colors"
                   style={{
-                    background: form.isReceived ? "var(--brand)" : "#D1D5DB",
+                    background: form.isReceived ? "#4F46E5" : "#D1D5DB",
                   }}
                   onClick={() =>
                     setForm((p) => ({ ...p, isReceived: !p.isReceived }))
                   }
                 >
                   <div
-                    className="toggle-thumb"
+                    className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-white shadow-sm transition-transform"
                     style={{
                       transform: form.isReceived
-                        ? "translateX(18px)"
-                        : "translateX(0)",
+                        ? "translateX(21px)"
+                        : "translateX(3px)",
+                      transition:
+                        "transform 0.2s cubic-bezier(0.34,1.3,0.64,1)",
                     }}
                   />
                 </div>
                 <div>
-                  <div
-                    style={{
-                      fontSize: "0.875rem",
-                      fontWeight: 600,
-                      color: "var(--t1)",
-                    }}
-                  >
+                  <div className="text-[0.875rem] font-semibold text-[#0F1117]">
                     Money received (Credit)
                   </div>
-                  <div style={{ fontSize: "0.75rem", color: "var(--t4)" }}>
+                  <div className="text-[0.75rem] text-gray-400">
                     Toggle off for expense / debit
                   </div>
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+              <div className="flex gap-2.5 mt-1">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="btn btn-ghost"
-                  style={{ flex: 1 }}
+                  className="flex-1 px-4 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-[#F4F6FB] hover:bg-white text-gray-700 text-[0.875rem] font-semibold cursor-pointer transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn btn-primary"
-                  style={{ flex: 1 }}
                   disabled={submitting}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[0.875rem] font-semibold shadow-[0_4px_14px_rgba(79,70,229,0.35)] disabled:opacity-55 disabled:cursor-not-allowed border-none cursor-pointer transition"
                 >
                   {submitting ? (
                     <>
@@ -863,7 +653,7 @@ export default function Transactions({
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
-                        className="spin"
+                        className="animate-spin"
                       >
                         <circle cx="12" cy="12" r="9" strokeDasharray="28 56" />
                       </svg>{" "}

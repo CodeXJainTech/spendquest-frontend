@@ -1,50 +1,18 @@
 // Wallet is superseded by the inline hero card in DashboardHome
 // Keeping as thin pass-through for compatibility
 import React from "react";
+
 export default function Wallet({ balance, setActivePage }) {
   return (
     <div
-      style={{
-        borderRadius: 20,
-        padding: "24px",
-        background: "linear-gradient(135deg,#1E1B4B,#4338CA)",
-        color: "#fff",
-        position: "relative",
-        overflow: "hidden",
-      }}
+      className="relative overflow-hidden rounded-2xl p-6 text-white"
+      style={{ background: "linear-gradient(135deg, #1E1B4B, #4338CA)" }}
     >
-      <div
-        style={{
-          position: "absolute",
-          top: -30,
-          right: -30,
-          width: 140,
-          height: 140,
-          borderRadius: "50%",
-          background: "rgba(255,255,255,0.05)",
-        }}
-      />
-      <div
-        style={{
-          fontSize: "0.7rem",
-          fontWeight: 700,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          color: "rgba(199,210,254,0.6)",
-          marginBottom: 8,
-        }}
-      >
+      <div className="absolute -top-7 -right-7 w-36 h-36 rounded-full bg-white/[0.05] pointer-events-none" />
+      <div className="text-[0.7rem] font-bold uppercase tracking-[0.1em] text-indigo-200/60 mb-2">
         Balance
       </div>
-      <div
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "2rem",
-          fontWeight: 800,
-          letterSpacing: "-0.03em",
-          marginBottom: 20,
-        }}
-      >
+      <div className="text-[2rem] font-extrabold tracking-[-0.03em] mb-5">
         ₹{Number(balance).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
       </div>
       <button
@@ -52,20 +20,7 @@ export default function Wallet({ balance, setActivePage }) {
           window.location.hash = "Transactions";
           setActivePage("Transactions");
         }}
-        style={{
-          padding: "8px 18px",
-          borderRadius: 10,
-          background: "rgba(255,255,255,0.12)",
-          border: "1px solid rgba(255,255,255,0.2)",
-          color: "#fff",
-          cursor: "pointer",
-          fontSize: "0.8rem",
-          fontWeight: 600,
-          fontFamily: "var(--font-body)",
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-        }}
+        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[10px] bg-white/[0.12] hover:bg-white/20 border border-white/20 text-white text-[0.8rem] font-semibold cursor-pointer transition"
       >
         + Add Transaction
       </button>

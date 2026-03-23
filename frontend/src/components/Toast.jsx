@@ -14,9 +14,7 @@ const fire = (t) => {
 
 const CFG = {
   success: {
-    bg: "#ECFDF5",
-    color: "#065F46",
-    border: "#A7F3D0",
+    cls: "bg-emerald-50 border-emerald-200 text-emerald-800",
     icon: (
       <svg
         width="14"
@@ -32,9 +30,7 @@ const CFG = {
     ),
   },
   error: {
-    bg: "#FEF2F2",
-    color: "#991B1B",
-    border: "#FECACA",
+    cls: "bg-red-50 border-red-200 text-red-800",
     icon: (
       <svg
         width="14"
@@ -51,9 +47,7 @@ const CFG = {
     ),
   },
   info: {
-    bg: "#EEF2FF",
-    color: "#3730A3",
-    border: "#C7D2FE",
+    cls: "bg-indigo-50 border-indigo-200 text-indigo-800",
     icon: (
       <svg
         width="14"
@@ -88,29 +82,16 @@ function Item({ id, type, m, d, onRemove }) {
         setVis(false);
         setTimeout(() => onRemove(id), 280);
       }}
+      className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border text-[13px] font-medium max-w-[340px] cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.10)] ${c.cls}`}
       style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        padding: "10px 14px",
-        borderRadius: 12,
-        background: c.bg,
-        border: `1px solid ${c.border}`,
-        color: c.color,
-        boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-        fontFamily: "'Plus Jakarta Sans',sans-serif",
-        fontSize: 13,
-        fontWeight: 500,
-        maxWidth: 340,
-        cursor: "pointer",
         transform: vis ? "translateX(0)" : "translateX(110%)",
         opacity: vis ? 1 : 0,
         transition:
           "transform 0.26s cubic-bezier(.22,1,.36,1), opacity 0.26s ease",
       }}
     >
-      <span style={{ flexShrink: 0 }}>{c.icon}</span>
-      <span style={{ flex: 1 }}>{m}</span>
+      <span className="shrink-0">{c.icon}</span>
+      <span className="flex-1">{m}</span>
     </div>
   );
 }
@@ -127,20 +108,9 @@ export function ToastContainer() {
     return () => listeners.delete(h);
   }, []);
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: 24,
-        right: 24,
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-        zIndex: 9999,
-        pointerEvents: "none",
-      }}
-    >
+    <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-[9999] pointer-events-none">
       {toasts.map((t) => (
-        <div key={t.id} style={{ pointerEvents: "auto" }}>
+        <div key={t.id} className="pointer-events-auto">
           <Item {...t} onRemove={remove} />
         </div>
       ))}

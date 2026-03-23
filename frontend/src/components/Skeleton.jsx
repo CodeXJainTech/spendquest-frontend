@@ -1,7 +1,8 @@
 import React from "react";
 
-const S = ({ w, h, r = 8, style = {} }) => (
+const S = ({ w, h, r = 8, className = "" }) => (
   <div
+    className={`shrink-0 ${className}`}
     style={{
       width: w || "100%",
       height: h,
@@ -10,152 +11,115 @@ const S = ({ w, h, r = 8, style = {} }) => (
         "linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%)",
       backgroundSize: "400px 100%",
       animation: "skShimmer 1.5s ease-in-out infinite",
-      flexShrink: 0,
-      ...style,
     }}
   />
 );
 
-if (typeof document !== "undefined" && !document.getElementById("sk-kf")) {
-  const el = document.createElement("style");
-  el.id = "sk-kf";
-  el.textContent = `@keyframes skShimmer { 0%{background-position:400px 0} 100%{background-position:-400px 0} }`;
-  document.head.appendChild(el);
-}
-
-const Card = ({ children, p = 24 }) => (
+const Card = ({ children, className = "" }) => (
   <div
-    style={{
-      background: "#fff",
-      borderRadius: 20,
-      border: "1px solid #E5E7EB",
-      boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-      padding: p,
-    }}
+    className={`bg-white rounded-2xl border border-gray-200 shadow-sm p-6 ${className}`}
   >
     {children}
   </div>
 );
-const Row = ({ gap = 12, mb = 0, children }) => (
-  <div style={{ display: "flex", gap, marginBottom: mb, alignItems: "center" }}>
-    {children}
-  </div>
+const Row = ({ children, className = "" }) => (
+  <div className={`flex items-center gap-3 ${className}`}>{children}</div>
 );
 
 export function DashboardSkeleton() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="flex flex-col gap-5">
       <S h={160} r={20} />
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
-          gap: 14,
-        }}
+        className="grid gap-3.5"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}
       >
         {[1, 2, 3, 4].map((i) => (
-          <Card key={i} p={20}>
-            <S h={12} w={80} style={{ marginBottom: 14 }} />
+          <Card key={i} className="!p-5">
+            <S h={12} w={80} className="mb-3.5" />
             <S h={28} w={100} />
           </Card>
         ))}
       </div>
       <Card>
-        <S h={18} w={140} style={{ marginBottom: 20 }} />
+        <S h={18} w={140} className="mb-5" />
         <S h={200} />
       </Card>
-      <Card p={0}>
-        <div
-          style={{ padding: "16px 20px", borderBottom: "1px solid #E5E7EB" }}
-        >
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-gray-100">
           <S h={18} w={180} />
         </div>
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            style={{
-              padding: "14px 20px",
-              borderBottom: "1px solid #F3F4F6",
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-            }}
+            className="flex items-center gap-3 px-5 py-3.5 border-b border-gray-50"
           >
-            <S h={32} w={32} r={8} style={{ flexShrink: 0 }} />
-            <S h={13} style={{ flex: 1 }} />
+            <S h={32} w={32} r={8} />
+            <S h={13} className="flex-1" />
             <S h={13} w={80} />
           </div>
         ))}
-      </Card>
+      </div>
     </div>
   );
 }
 
 export function TransactionsSkeleton() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Row gap={12}>
+    <div className="flex flex-col gap-5">
+      <Row className="gap-3">
         <S h={28} w={160} />
-        <div style={{ flex: 1 }} />
+        <div className="flex-1" />
         <S h={38} w={140} />
         <S h={38} w={90} />
       </Row>
-      <Row gap={10}>
-        <S h={38} style={{ flex: 1 }} />
+      <Row>
+        <S h={38} className="flex-1" />
         <S h={38} w={150} />
       </Row>
-      <Card p={0}>
-        <S h={44} r={0} style={{ borderRadius: "20px 20px 0 0" }} />
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <S h={44} r={0} style={{ borderRadius: "16px 16px 0 0" }} />
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <div
             key={i}
-            style={{
-              padding: "14px 20px",
-              borderBottom: "1px solid #F3F4F6",
-              display: "flex",
-              gap: 16,
-              alignItems: "center",
-            }}
+            className="flex items-center gap-4 px-5 py-3.5 border-b border-gray-50"
           >
-            <S h={36} w={36} r={10} style={{ flexShrink: 0 }} />
-            <S h={13} style={{ flex: 1 }} />
+            <S h={36} w={36} r={10} />
+            <S h={13} className="flex-1" />
             <S h={13} w={80} />
             <S h={22} w={55} r={99} />
           </div>
         ))}
-      </Card>
+      </div>
     </div>
   );
 }
 
 export function CardGridSkeleton({ count = 4 }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Row gap={12}>
+    <div className="flex flex-col gap-5">
+      <Row>
         <S h={28} w={120} />
-        <div style={{ flex: 1 }} />
+        <div className="flex-1" />
         <S h={38} w={130} />
       </Row>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))",
-          gap: 16,
-        }}
+        className="grid gap-4"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
       >
         {Array.from({ length: count }).map((_, i) => (
-          <Card key={i} p={22}>
-            <Row gap={12} mb={18}>
+          <Card key={i} className="!p-[22px]">
+            <Row className="gap-3 mb-4">
               <S h={44} w={44} r={12} />
-              <div style={{ flex: 1 }}>
-                <S h={14} w={100} style={{ marginBottom: 6 }} />
+              <div className="flex-1">
+                <S h={14} w={100} className="mb-1.5" />
                 <S h={11} w={70} />
               </div>
             </Row>
-            <S h={8} r={99} style={{ marginBottom: 12 }} />
-            <Row gap={0}>
+            <S h={8} r={99} className="mb-3" />
+            <Row>
               <S h={12} w={90} />
-              <div style={{ flex: 1 }} />
+              <div className="flex-1" />
               <S h={22} w={70} r={99} />
             </Row>
           </Card>
@@ -167,20 +131,13 @@ export function CardGridSkeleton({ count = 4 }) {
 
 export function FormSkeleton() {
   return (
-    <div
-      style={{
-        maxWidth: 520,
-        display: "flex",
-        flexDirection: "column",
-        gap: 20,
-      }}
-    >
+    <div className="max-w-[520px] flex flex-col gap-5">
       <S h={28} w={140} />
       <Card>
-        <S h={52} w={52} r={14} style={{ marginBottom: 24 }} />
+        <S h={52} w={52} r={14} className="mb-6" />
         {[1, 2, 3].map((i) => (
-          <div key={i} style={{ marginBottom: 18 }}>
-            <S h={11} w={80} style={{ marginBottom: 8 }} />
+          <div key={i} className="mb-[18px]">
+            <S h={11} w={80} className="mb-2" />
             <S h={42} r={10} />
           </div>
         ))}

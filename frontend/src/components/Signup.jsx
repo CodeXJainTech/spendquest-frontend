@@ -35,55 +35,30 @@ export default function Signup() {
     }
   };
 
+  const inputCls =
+    "w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm placeholder:text-gray-400 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/10 transition";
+  const labelCls =
+    "block text-[0.75rem] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider";
+
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "var(--bg)",
-        padding: "40px 24px",
-      }}
-    >
-      <div style={{ width: "100%", maxWidth: 460 }}>
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 800,
-              fontSize: "1.9rem",
-              color: "var(--t1)",
-              letterSpacing: "-0.02em",
-              marginBottom: 8,
-            }}
-          >
-            Spend<span style={{ color: "var(--brand)" }}>Quest</span>
+    <div className="min-h-screen flex items-center justify-center bg-[#F4F6FB] px-6 py-10">
+      <div className="w-full max-w-[460px]">
+        <div className="text-center mb-8">
+          <div className="font-extrabold text-[1.9rem] text-[#0F1117] tracking-tight mb-2">
+            Spend<span className="text-indigo-600">Quest</span>
           </div>
-          <div
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: "1.3rem",
-              color: "var(--t1)",
-            }}
-          >
+          <div className="font-bold text-[1.3rem] text-[#0F1117]">
             Create your account
           </div>
-          <div
-            style={{ color: "var(--t4)", marginTop: 6, fontSize: "0.875rem" }}
-          >
+          <div className="text-gray-400 mt-1.5 text-[0.875rem]">
             Start taking control of your finances today
           </div>
         </div>
 
-        <div className="card card-p">
-          <form
-            onSubmit={submit}
-            style={{ display: "flex", flexDirection: "column", gap: 14 }}
-          >
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+          <form onSubmit={submit} className="flex flex-col gap-3.5">
             <div>
-              <label className="label">Email Address</label>
+              <label className={labelCls}>Email Address</label>
               <input
                 name="userName"
                 type="email"
@@ -92,47 +67,43 @@ export default function Signup() {
                   setForm((p) => ({ ...p, userName: e.target.value }));
                   setError("");
                 }}
-                className="input"
+                className={inputCls}
                 placeholder="you@example.com"
                 required
               />
             </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 12,
-              }}
-            >
+
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="label">First Name</label>
+                <label className={labelCls}>First Name</label>
                 <input
                   name="firstName"
                   value={form.firstName}
                   onChange={(e) =>
                     setForm((p) => ({ ...p, firstName: e.target.value }))
                   }
-                  className="input"
+                  className={inputCls}
                   placeholder="Raj"
                   required
                 />
               </div>
               <div>
-                <label className="label">Last Name</label>
+                <label className={labelCls}>Last Name</label>
                 <input
                   name="lastName"
                   value={form.lastName}
                   onChange={(e) =>
                     setForm((p) => ({ ...p, lastName: e.target.value }))
                   }
-                  className="input"
+                  className={inputCls}
                   placeholder="Sharma"
                   required
                 />
               </div>
             </div>
+
             <div>
-              <label className="label">Password</label>
+              <label className={labelCls}>Password</label>
               <input
                 name="password"
                 type="password"
@@ -140,25 +111,16 @@ export default function Signup() {
                 onChange={(e) =>
                   setForm((p) => ({ ...p, password: e.target.value }))
                 }
-                className="input"
+                className={inputCls}
                 placeholder="Min. 6 characters"
                 required
               />
             </div>
+
             <div>
-              <label className="label">Starting Balance (₹)</label>
-              <div style={{ position: "relative" }}>
-                <span
-                  style={{
-                    position: "absolute",
-                    left: 14,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 700,
-                    color: "var(--t3)",
-                  }}
-                >
+              <label className={labelCls}>Starting Balance (₹)</label>
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-gray-400">
                   ₹
                 </span>
                 <input
@@ -170,8 +132,7 @@ export default function Signup() {
                   onChange={(e) =>
                     setForm((p) => ({ ...p, s_balance: e.target.value }))
                   }
-                  className="input"
-                  style={{ paddingLeft: 28 }}
+                  className={`${inputCls} pl-7`}
                   placeholder="0.00"
                   required
                 />
@@ -179,31 +140,15 @@ export default function Signup() {
             </div>
 
             {error && (
-              <div
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: "var(--r-md)",
-                  background: "var(--red-bg)",
-                  border: "1px solid #FECACA",
-                  color: "var(--red-text)",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                }}
-              >
+              <div className="px-3.5 py-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-[0.85rem] font-medium">
                 {error}
               </div>
             )}
 
             <button
               type="submit"
-              className="btn btn-primary"
-              style={{
-                width: "100%",
-                padding: "12px",
-                fontSize: "0.95rem",
-                marginTop: 4,
-              }}
               disabled={loading}
+              className="mt-1 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[0.95rem] font-semibold shadow-[0_4px_14px_rgba(79,70,229,0.35)] hover:-translate-y-px disabled:opacity-55 disabled:cursor-not-allowed disabled:transform-none transition"
             >
               {loading ? (
                 <>
@@ -214,7 +159,7 @@ export default function Signup() {
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="spin"
+                    className="animate-spin"
                   >
                     <circle cx="12" cy="12" r="9" strokeDasharray="28 56" />
                   </svg>{" "}
@@ -226,24 +171,11 @@ export default function Signup() {
             </button>
           </form>
 
-          <div
-            style={{
-              marginTop: 20,
-              textAlign: "center",
-              fontSize: "0.875rem",
-              color: "var(--t4)",
-              paddingTop: 20,
-              borderTop: "1px solid var(--border)",
-            }}
-          >
+          <div className="mt-5 text-center text-[0.875rem] text-gray-400 pt-5 border-t border-gray-100">
             Already have an account?{" "}
             <Link
               to="/signin"
-              style={{
-                color: "var(--brand)",
-                fontWeight: 600,
-                textDecoration: "none",
-              }}
+              className="text-indigo-600 font-semibold hover:underline"
             >
               Sign in
             </Link>

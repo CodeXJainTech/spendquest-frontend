@@ -1,6 +1,39 @@
 import React, { useState } from "react";
 import { toast } from "./Toast";
 
+const inputCls =
+  "w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm placeholder:text-gray-400 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/10 transition";
+const labelCls =
+  "block text-[0.75rem] font-semibold text-gray-500 mb-1.5 uppercase tracking-wider";
+
+const Eye = ({ show }) =>
+  show ? (
+    <svg
+      width="15"
+      height="15"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  ) : (
+    <svg
+      width="15"
+      height="15"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+
 export default function Settings({ userInfo, authAxios, onLogout }) {
   const [form, setForm] = useState({ currentPassword: "", newPassword: "" });
   const [loading, setLoad] = useState(false);
@@ -27,56 +60,15 @@ export default function Settings({ userInfo, authAxios, onLogout }) {
 
   const initial = userInfo.name ? userInfo.name[0].toUpperCase() : "?";
 
-  const Eye = ({ show }) =>
-    show ? (
-      <svg
-        width="15"
-        height="15"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
-        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-        <line x1="1" y1="1" x2="23" y2="23" />
-      </svg>
-    ) : (
-      <svg
-        width="15"
-        height="15"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-        <circle cx="12" cy="12" r="3" />
-      </svg>
-    );
-
   return (
-    <div
-      style={{
-        maxWidth: 560,
-        display: "flex",
-        flexDirection: "column",
-        gap: 20,
-      }}
-      className="animate-fade-up"
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-        }}
-      >
-        <div className="page-title">Settings</div>
+    <div className="max-w-[560px] flex flex-col gap-5 animate-fade-up">
+      <div className="flex items-start justify-between">
+        <div className="font-bold text-2xl text-[#0F1117] tracking-tight">
+          Settings
+        </div>
         <button
           onClick={onLogout}
-          className="btn btn-danger"
-          style={{ fontSize: "0.85rem" }}
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-500 text-[0.85rem] font-semibold border-[1.5px] border-red-200 cursor-pointer transition"
         >
           <svg
             width="14"
@@ -94,65 +86,38 @@ export default function Settings({ userInfo, authAxios, onLogout }) {
         </button>
       </div>
 
-      {/* Profile */}
-      <div
-        className="card card-p"
-        style={{ display: "flex", alignItems: "center", gap: 16 }}
-      >
-        <div
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: "16px",
-            background: "var(--brand)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontFamily: "var(--font-display)",
-            fontWeight: 800,
-            fontSize: "1.3rem",
-            flexShrink: 0,
-            boxShadow: "var(--shadow-brand)",
-          }}
-        >
+      {/* Profile card */}
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex items-center gap-4">
+        <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-extrabold text-[1.3rem] shrink-0 shadow-[0_4px_14px_rgba(79,70,229,0.35)]">
           {initial}
         </div>
         <div>
-          <div
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: "1.1rem",
-              color: "var(--t1)",
-            }}
-          >
+          <div className="font-bold text-[1.1rem] text-[#0F1117]">
             {userInfo.name}
           </div>
-          <div style={{ fontSize: "0.8rem", color: "var(--t4)", marginTop: 3 }}>
+          <div className="text-[0.8rem] text-gray-400 mt-0.5">
             {userInfo.email}
           </div>
         </div>
-        <span className="badge badge-brand" style={{ marginLeft: "auto" }}>
+        <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.72rem] font-semibold bg-indigo-50 text-indigo-700">
           Active
         </span>
       </div>
 
       {/* Change password */}
-      <div className="card card-p">
-        <div style={{ marginBottom: 20 }}>
-          <div className="section-title">Change Password</div>
-          <div style={{ fontSize: "0.8rem", color: "var(--t4)", marginTop: 4 }}>
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div className="mb-5">
+          <div className="font-bold text-[1rem] text-[#0F1117]">
+            Change Password
+          </div>
+          <div className="text-[0.8rem] text-gray-400 mt-1">
             Must be at least 6 characters long
           </div>
         </div>
-        <form
-          onSubmit={save}
-          style={{ display: "flex", flexDirection: "column", gap: 16 }}
-        >
+        <form onSubmit={save} className="flex flex-col gap-4">
           <div>
-            <label className="label">Current Password</label>
-            <div style={{ position: "relative" }}>
+            <label className={labelCls}>Current Password</label>
+            <div className="relative">
               <input
                 type={showCur ? "text" : "password"}
                 name="currentPassword"
@@ -160,34 +125,22 @@ export default function Settings({ userInfo, authAxios, onLogout }) {
                 onChange={(e) =>
                   setForm((p) => ({ ...p, currentPassword: e.target.value }))
                 }
-                className="input"
-                style={{ paddingRight: 42 }}
+                className={`${inputCls} pr-11`}
                 placeholder="Enter current password"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowCur((v) => !v)}
-                style={{
-                  position: "absolute",
-                  right: 12,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "var(--t4)",
-                  display: "flex",
-                  padding: 2,
-                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-gray-400 hover:text-gray-600 flex p-0.5 transition"
               >
                 <Eye show={showCur} />
               </button>
             </div>
           </div>
           <div>
-            <label className="label">New Password</label>
-            <div style={{ position: "relative" }}>
+            <label className={labelCls}>New Password</label>
+            <div className="relative">
               <input
                 type={showNew ? "text" : "password"}
                 name="newPassword"
@@ -195,26 +148,14 @@ export default function Settings({ userInfo, authAxios, onLogout }) {
                 onChange={(e) =>
                   setForm((p) => ({ ...p, newPassword: e.target.value }))
                 }
-                className="input"
-                style={{ paddingRight: 42 }}
+                className={`${inputCls} pr-11`}
                 placeholder="Enter new password"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowNew((v) => !v)}
-                style={{
-                  position: "absolute",
-                  right: 12,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "var(--t4)",
-                  display: "flex",
-                  padding: 2,
-                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-gray-400 hover:text-gray-600 flex p-0.5 transition"
               >
                 <Eye show={showNew} />
               </button>
@@ -222,9 +163,8 @@ export default function Settings({ userInfo, authAxios, onLogout }) {
           </div>
           <button
             type="submit"
-            className="btn btn-primary"
-            style={{ alignSelf: "flex-start" }}
             disabled={loading}
+            className="self-start inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[0.875rem] font-semibold shadow-[0_4px_14px_rgba(79,70,229,0.35)] hover:-translate-y-px disabled:opacity-55 disabled:cursor-not-allowed disabled:transform-none border-none cursor-pointer transition"
           >
             {loading ? (
               <>
@@ -235,7 +175,7 @@ export default function Settings({ userInfo, authAxios, onLogout }) {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
-                  className="spin"
+                  className="animate-spin"
                 >
                   <circle cx="12" cy="12" r="9" strokeDasharray="28 56" />
                 </svg>{" "}
