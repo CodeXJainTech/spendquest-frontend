@@ -32,10 +32,10 @@ export default function Signin() {
     doLogin(form);
   };
   const loginDemo = () =>
-    doLogin({ userName: "demo@spendquest.com", password: "demo123" });
+    doLogin({ userName: "demo@spendquest.com", password: "123456" });
 
   return (
-    <div className="min-h-screen flex bg-white dark:bg-gray-950">
+    <div className="min-h-screen flex bg-[#F4F6FB]">
       {/* ── Left panel ── */}
       <div
         className="hidden md:flex w-[42%] flex-col justify-between p-12 relative overflow-hidden"
@@ -83,14 +83,14 @@ export default function Signin() {
       <div className="flex-1 flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-[400px]">
           {/* Mobile logo */}
-          <div className="md:hidden font-extrabold text-[1.6rem] text-gray-900 dark:text-white mb-8 tracking-tight">
+          <div className="md:hidden font-extrabold text-[1.6rem] text-gray-900 mb-8 tracking-tight">
             Spend
             <span className="text-indigo-600 dark:text-indigo-400">Quest</span>
           </div>
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="font-extrabold text-[1.75rem] text-gray-900 dark:text-white tracking-tight">
+            <h1 className="font-extrabold text-[1.75rem] text-gray-900 tracking-tight">
               Welcome back
             </h1>
             <p className="text-gray-400 mt-1.5 text-[0.9rem]">
@@ -231,8 +231,7 @@ export default function Signin() {
               onClick={loginDemo}
               disabled={loading}
               className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg
-                         border border-gray-200 dark:border-gray-700
-                         bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800
+                         border dark:border-gray-700 dark:bg-gray-50 dark:hover:bg-gray-800
                          text-gray-700 dark:text-gray-300 text-[0.875rem] font-medium
                          disabled:opacity-60 disabled:cursor-not-allowed
                          focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
