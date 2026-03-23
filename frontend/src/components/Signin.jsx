@@ -114,11 +114,7 @@ export default function Signin() {
                 }}
                 placeholder="you@example.com"
                 required
-                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700
-                           bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm
-                           placeholder:text-gray-400 dark:placeholder:text-gray-600
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                           transition"
+                className="w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm placeholder:text-gray-400 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/10 transition"
               />
             </div>
 
@@ -138,11 +134,7 @@ export default function Signin() {
                   }}
                   placeholder="Enter your password"
                   required
-                  className="w-full px-3.5 py-2.5 pr-11 rounded-lg border border-gray-200 dark:border-gray-700
-                             bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm
-                             placeholder:text-gray-400 dark:placeholder:text-gray-600
-                             focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                             transition"
+                  className="w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-gray-200 bg-white text-[#0F1117] text-sm placeholder:text-gray-400 focus:outline-none focus:border-indigo-600 focus:ring-[3px] focus:ring-indigo-600/10 transition"
                 />
                 <button
                   type="button"
